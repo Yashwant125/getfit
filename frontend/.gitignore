@@ -1,0 +1,33 @@
+# dependencies
+node_modules/
+
+# production build
+build/
+dist/
+
+# environment variables
+.env
+.env.*  # e.g., .env.local, .env.production
+
+# misc
+.DS_Store
+Thumbs.db
+
+# log files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# IDE/editor settings
+.vscode/
+.idea/
+
+# testing
+coverage/
+
+# TypeScript
+*.tsbuildinfo
+
+# optional: ignore lock files (only if not using them)
+# package-lock.json
+# yarn.lock

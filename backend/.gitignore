@@ -1,0 +1,21 @@
+# Node.js dependencies
+node_modules/
+
+# Logs
+*.log
+
+# Environment variables
+.env
+
+# npm debug log
+npm-debug.log
+
+# VS Code settings
+.vscode/
+
+# Debugger configuration files
+.idea/
+
+# Build output
+dist/
+build/
