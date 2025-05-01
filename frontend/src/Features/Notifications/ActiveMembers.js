@@ -16,7 +16,7 @@ const ActiveMembers = () => {
   useEffect(() => {
     const fetchActiveMembers = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/members/active");
+        const response = await axios.get("https://getfit-v9g1.onrender.com/api/members/active");
         setActiveMembers(response.data);
       } catch (error) {
         console.error("Failed to fetch active members:", error);
