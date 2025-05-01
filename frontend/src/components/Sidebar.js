@@ -142,14 +142,20 @@ const Sidebar = ({ open, onClose, setValue }) => {
           </ListItem>
           <Collapse in={expandedSection === 'support'} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
-              <ListItemButton sx={{ pl: 4 }} onClick={() => { setValue(13); onClose(); }}>
-                <ListItemText primary="Cancellation and Refund" />
-              </ListItemButton>
               <ListItemButton sx={{ pl: 4 }} onClick={() => { setValue(14); onClose(); }}>
                 <ListItemText primary="Terms and Conditions" />
               </ListItemButton>
+              <ListItemButton sx={{ pl: 4 }} onClick={() => { setValue(16); onClose(); }}>
+                <ListItemText primary="Privacy Policy" />
+              </ListItemButton>
+              <ListItemButton sx={{ pl: 4 }} onClick={() => { setValue(17); onClose(); }}>
+                <ListItemText primary="Shipping Policy" />
+              </ListItemButton>
               <ListItemButton sx={{ pl: 4 }} onClick={() => { setValue(15); onClose(); }}>
                 <ListItemText primary="Contact Us" />
+              </ListItemButton>
+              <ListItemButton sx={{ pl: 4 }} onClick={() => { setValue(13); onClose(); }}>
+                <ListItemText primary="Cancellation and Refund" />
               </ListItemButton>
             </List>
           </Collapse>

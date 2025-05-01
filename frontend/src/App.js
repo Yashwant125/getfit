@@ -14,10 +14,12 @@ import FeedbackSection from "./Features/FeedbackSection/Feedback";
 import NotifyAll from "./Features/Notify/NotifyAll";
 import OwnerProfile from "./Features/OwnerProfile/Profile";
 
-// ✅ New Support Pages
+// ✅ Support Pages
 import CancellationRefund from "./Features/Support/CancellationRefund";
 import TermsAndConditions from "./Features/Support/TermsAndConditions";
 import ContactUs from "./Features/Support/ContactUs";
+import PrivacyPolicy from "./Features/Support/PrivacyPolicy";
+import ShippingPolicy from "./Features/Support/ShippingPolicy";
 
 import axios from "axios";
 
@@ -80,6 +82,10 @@ const App = () => {
         return <TermsAndConditions />;
       case 15:
         return <ContactUs />;
+      case 16:
+        return <PrivacyPolicy />;
+      case 17:
+        return <ShippingPolicy />;
       default:
         return <Dashboard />;
     }
