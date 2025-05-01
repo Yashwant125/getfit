@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-
 import Navbar from "./components/Navbar";
 import Dashboard from "./components/Dashboard";
 import Footer from "./components/Footer";
@@ -78,27 +76,28 @@ const App = () => {
         return <OwnerProfile />;
       case 12:
         return <NotifyAll />;
+      case 13:
+        return <CancellationRefund />;
+      case 14:
+        return <TermsAndConditions />;
+      case 15:
+        return <ContactUs />;
+      case 16:
+        return <PrivacyPolicy />;
+      case 17:
+        return <ShippingPolicy />;
       default:
         return <Dashboard />;
     }
   };
 
   return (
-    <Router>
+    <div>
       <Navbar setValue={setValue} setSidebarOpen={setSidebarOpen} />
-      <Routes>
-        <Route path="/" element={renderComponent()} />
-
-        {/* ✅ Support Pages Routes */}
-        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-        <Route path="/shipping-policy" element={<ShippingPolicy />} />
-        <Route path="/contact" element={<ContactUs />} />
-        <Route path="/terms" element={<TermsAndConditions />} />
-        <Route path="/refund-policy" element={<CancellationRefund />} />
-      </Routes>
+      {renderComponent()}
       <Footer value={value} setValue={setValue} />
       <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} setValue={setValue} />
-    </Router>
+    </div>
   );
 };
 
