@@ -18,7 +18,7 @@ const ExpiredMembers = () => {
   useEffect(() => {
     const fetchExpiredMembers = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/members/expired");
+        const response = await axios.get("https://getfit-v9g1.onrender.com/api/members/expired");
         setExpiredMembers(response.data);
       } catch (error) {
         setError("Error fetching expired members.");

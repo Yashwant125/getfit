@@ -18,7 +18,7 @@ const UnpaidMembers = () => {
   useEffect(() => {
     const fetchUnpaidMembers = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/members/unpaid");
+        const response = await axios.get("https://getfit-v9g1.onrender.com/api/members/unpaid");
         setUnpaidMembers(response.data);
       } catch (error) {
         setError("Error fetching unpaid members.");

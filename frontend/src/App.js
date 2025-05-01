@@ -30,7 +30,7 @@ const App = () => {
   useEffect(() => {
     const fetchPlans = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/plans");
+        const res = await axios.get("https://getfit-v9g1.onrender.com/api/plans");
         setPlans(res.data);
       } catch (err) {
         console.error("❌ Error fetching plans:", err);
@@ -39,7 +39,7 @@ const App = () => {
 
     const fetchMembers = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/members");
+        const res = await axios.get("https://getfit-v9g1.onrender.com/api/members");
         setMembers(res.data);
       } catch (err) {
         console.error("❌ Error fetching members:", err);
