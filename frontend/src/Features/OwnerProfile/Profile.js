@@ -63,7 +63,7 @@ const Profile = () => {
     const profileData = { ...gymInfo, trainers };
 
     axios
-      .post("http://localhost:5000/api/profile", profileData)
+      .post("https://getfit-v9g1.onrender.com/api/profile", profileData)
       .then((res) => {
         console.log("Saved profile:", res.data);
         setIsEditing(false);
