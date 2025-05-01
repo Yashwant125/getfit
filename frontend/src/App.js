@@ -34,7 +34,7 @@ const App = () => {
 
     const fetchMembers = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/members");
+        const res = await axios.get("https://getfit-v9g1.onrender.com/api/members");
         setMembers(res.data);
       } catch (err) {
         console.error("❌ Error fetching members:", err);
