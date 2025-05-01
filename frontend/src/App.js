@@ -12,7 +12,12 @@ import ActiveMembers from "./Features/Notifications/ActiveMembers";
 import Sidebar from "./components/Sidebar";
 import FeedbackSection from "./Features/FeedbackSection/Feedback";
 import NotifyAll from "./Features/Notify/NotifyAll";
-import OwnerProfile from "./Features/OwnerProfile/Profile"; // ✅ NEW
+import OwnerProfile from "./Features/OwnerProfile/Profile";
+
+// ✅ New Support Pages
+import CancellationRefund from "./Features/Support/CancellationRefund";
+import TermsAndConditions from "./Features/Support/TermsAndConditions";
+import ContactUs from "./Features/Support/ContactUs";
 
 import axios from "axios";
 
@@ -65,10 +70,16 @@ const App = () => {
         return <ActiveMembers />;
       case 8:
         return <FeedbackSection />;
-      case 9: // ✅ Owner Profile page
+      case 9:
         return <OwnerProfile />;
       case 12:
         return <NotifyAll />;
+      case 13:
+        return <CancellationRefund />;
+      case 14:
+        return <TermsAndConditions />;
+      case 15:
+        return <ContactUs />;
       default:
         return <Dashboard />;
     }

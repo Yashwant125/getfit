@@ -128,6 +128,31 @@ const Sidebar = ({ open, onClose, setValue }) => {
               <ListItemText primary="Logout" />
             </ListItemButton>
           </ListItem>
+
+          {/* Black Divider */}
+          <Divider sx={{ my: 1, borderColor: '#000' }} />
+
+          {/* Support */}
+          <ListItem disablePadding>
+            <ListItemButton onClick={() => handleToggle('support')}>
+              <ListItemIcon><FeedbackIcon /></ListItemIcon>
+              <ListItemText primary="Support" />
+              {expandedSection === 'support' ? <ExpandLess /> : <ExpandMore />}
+            </ListItemButton>
+          </ListItem>
+          <Collapse in={expandedSection === 'support'} timeout="auto" unmountOnExit>
+            <List component="div" disablePadding>
+              <ListItemButton sx={{ pl: 4 }} onClick={() => { setValue(13); onClose(); }}>
+                <ListItemText primary="Cancellation and Refund" />
+              </ListItemButton>
+              <ListItemButton sx={{ pl: 4 }} onClick={() => { setValue(14); onClose(); }}>
+                <ListItemText primary="Terms and Conditions" />
+              </ListItemButton>
+              <ListItemButton sx={{ pl: 4 }} onClick={() => { setValue(15); onClose(); }}>
+                <ListItemText primary="Contact Us" />
+              </ListItemButton>
+            </List>
+          </Collapse>
         </List>
       </Box>
     </Drawer>
