@@ -35,7 +35,7 @@ const AddPlan = ({ setPlans }) => {
     const newPlan = { membershipType, duration, amount: parseInt(amount) };
 
     try {
-      const res = await fetch("http://localhost:5000/api/plans", {
+      const res = await fetch("https://getfit-v9g1.onrender.com/api/plans", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(newPlan),
