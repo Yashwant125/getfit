@@ -96,7 +96,7 @@ const AddMember = ({ setMembers }) => {
 
       console.log("Sending request with data:", updatedData);
 
-      const res = await axios.post("http://localhost:5000/api/members", updatedData);
+      const res = await axios.post("https://getfit-v9g1.onrender.com", updatedData);
 
       if (res.status === 200 || res.status === 201) {
         setMembers((prev) => [...prev, res.data]);
