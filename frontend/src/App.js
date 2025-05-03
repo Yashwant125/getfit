@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+
 import Navbar from "./components/Navbar";
-import Dashboard from "./components/Dashboard";
 import Footer from "./components/Footer";
+import Sidebar from "./components/Sidebar";
+
+import Dashboard from "./components/Dashboard";
 import AddMember from "./Features/Members/AddMember";
 import ViewMembers from "./Features/Members/ViewMembers";
 import AddPlan from "./Features/MembershipPlan/AddPlan";
@@ -9,17 +13,19 @@ import ViewPlans from "./Features/MembershipPlan/ViewPlans";
 import UnpaidMembers from "./Features/Notifications/UnpaidMembers";
 import ExpiredMembers from "./Features/Notifications/ExpiredMembers";
 import ActiveMembers from "./Features/Notifications/ActiveMembers";
-import Sidebar from "./components/Sidebar";
 import FeedbackSection from "./Features/FeedbackSection/Feedback";
 import NotifyAll from "./Features/Notify/NotifyAll";
 import OwnerProfile from "./Features/OwnerProfile/Profile";
 
-// ✅ Support Pages
+// Support Pages
 import CancellationRefund from "./Features/Support/CancellationRefund";
 import TermsAndConditions from "./Features/Support/TermsAndConditions";
 import ContactUs from "./Features/Support/ContactUs";
 import PrivacyPolicy from "./Features/Support/PrivacyPolicy";
 import ShippingPolicy from "./Features/Support/ShippingPolicy";
+
+// New About Page
+import About from "./Features/Support/About"; // Now correctly imported at the top
 
 import axios from "axios";
 
@@ -52,52 +58,33 @@ const App = () => {
     fetchMembers();
   }, []);
 
-  const renderComponent = () => {
-    switch (value) {
-      case 0:
-        return <Dashboard />;
-      case 1:
-        return <AddMember setMembers={setMembers} />;
-      case 2:
-        return <ViewMembers members={members} setMembers={setMembers} />;
-      case 3:
-        return <AddPlan setPlans={setPlans} />;
-      case 4:
-        return <ViewPlans plans={plans} />;
-      case 5:
-        return <UnpaidMembers />;
-      case 6:
-        return <ExpiredMembers />;
-      case 7:
-        return <ActiveMembers />;
-      case 8:
-        return <FeedbackSection />;
-      case 9:
-        return <OwnerProfile />;
-      case 12:
-        return <NotifyAll />;
-      case 13:
-        return <CancellationRefund />;
-      case 14:
-        return <TermsAndConditions />;
-      case 15:
-        return <ContactUs />;
-      case 16:
-        return <PrivacyPolicy />;
-      case 17:
-        return <ShippingPolicy />;
-      default:
-        return <Dashboard />;
-    }
-  };
-
   return (
-    <div>
+    <Router>
       <Navbar setValue={setValue} setSidebarOpen={setSidebarOpen} />
-      {renderComponent()}
+
+      <Routes>
+        <Route path="/" element={<Dashboard />} />                         {/* 0 */}
+        <Route path="/add-member" element={<AddMember setMembers={setMembers} />} />     {/* 1 */}
+        <Route path="/view-members" element={<ViewMembers members={members} setMembers={setMembers} />} />  {/* 2 */}
+        <Route path="/add-plan" element={<AddPlan setPlans={setPlans} />} />             {/* 3 */}
+        <Route path="/view-plans" element={<ViewPlans plans={plans} />} />               {/* 4 */}
+        <Route path="/unpaid-members" element={<UnpaidMembers />} />                     {/* 5 */}
+        <Route path="/expired-members" element={<ExpiredMembers />} />                   {/* 6 */}
+        <Route path="/active-members" element={<ActiveMembers />} />                     {/* 7 */}
+        <Route path="/feedback" element={<FeedbackSection />} />                         {/* 8 */}
+        <Route path="/profile" element={<OwnerProfile />} />                             {/* 9 */}
+        <Route path="/notify-all" element={<NotifyAll />} />                             {/* 12 */}
+        <Route path="/cancellation-refund" element={<CancellationRefund />} />           {/* 13 */}
+        <Route path="/terms" element={<TermsAndConditions />} />                         {/* 14 */}
+        <Route path="/contact" element={<ContactUs />} />                                {/* 15 */}
+        <Route path="/privacy" element={<PrivacyPolicy />} />                            {/* 16 */}
+        <Route path="/shipping" element={<ShippingPolicy />} />                          {/* 17 */}
+        <Route path="/about" element={<About />} />                                     {/* 18 */}
+      </Routes>
+
       <Footer value={value} setValue={setValue} />
       <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} setValue={setValue} />
-    </div>
+    </Router>
   );
 };
 
