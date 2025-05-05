@@ -49,7 +49,7 @@ const ViewMembers = ({ members, setMembers }) => {
         status: editingMember.status?.toLowerCase(),
       };
 
-      const res = await axios.put(`http://localhost:5000/api/members/${updatedMember._id}`, updatedMember);
+      const res = await axios.put(`https://getfit-v9g1.onrender.com/api/members/${updatedMember._id}`, updatedMember);
 
       setMembers((prev) =>
         prev.map((m) => (m._id === updatedMember._id ? { ...m, ...res.data } : m))
@@ -66,7 +66,7 @@ const ViewMembers = ({ members, setMembers }) => {
     if (!confirm) return;
 
     try {
-      await axios.delete(`http://localhost:5000/api/members/${id}`);
+      await axios.delete(`https://getfit-v9g1.onrender.com/api/members/${id}`);
       setMembers((prev) => prev.filter((m) => m._id !== id));
     } catch (error) {
       console.error('Error deleting member:', error);
