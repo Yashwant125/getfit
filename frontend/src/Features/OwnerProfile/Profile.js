@@ -39,7 +39,7 @@ const Profile = () => {
   // Fetch profile data on component mount
   useEffect(() => {
     axios
-      .get("http://localhost:5000/api/profile")
+      .get("https://getfit-v9g1.onrender.com/api/profile")
       .then((res) => {
         const data = res.data;
         if (data) {
