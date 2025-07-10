@@ -1,47 +1,25 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const cors = require('cors');
-const dotenv = require('dotenv');
+const express = require("express");
+const cors = require("cors");
+const dotenv = require("dotenv");
+const path = require("path");
+const connectDB = require("./config/db");
 
-// Load env variables from .env file
 dotenv.config();
 
-// Route imports
-const memberRoutes = require('./routes/memberRoutes');
-const planRoutes = require('./routes/planRoutes');
-const profileRoutes = require('./routes/profileRoutes'); // Profile route added
-
-// MongoDB URI check
-if (!process.env.MONGO_URI) {
-  console.error('❌ MONGO_URI not defined in .env file');
-  process.exit(1);
-}
-
 const app = express();
+connectDB();
 
-// Middlewares
 app.use(cors());
 app.use(express.json());
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
-// API Routes
-app.use('/api/members', memberRoutes);
-app.use('/api/plans', planRoutes);
-app.use('/api/profile', profileRoutes); // Gym profile route
+app.use("/api/members", require("./routes/memberRoutes"));
+app.use("/api/plans", require("./routes/planRoutes"));
+app.use("/api/profile", require("./routes/profileRoutes"));
+app.use("/api/attendance", require("./routes/attendanceRoutes"));
+app.use("/api/auth", require("./routes/authRoutes")); // 👈 Auth
 
-// Connect to MongoDB and start server
-mongoose
-  .connect(process.env.MONGO_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  .then(() => {
-    console.log('✅ MongoDB connected');
-    const PORT = process.env.PORT || 5000;
-    app.listen(PORT, () => {
-      console.log(`🚀 Server running at http://localhost:${PORT}`);
-    });
-  })
-  .catch((err) => {
-    console.error('❌ MongoDB connection error:', err);
-    process.exit(1);
-  });
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () =>
+  console.log(`🚀 Server running on http://localhost:${PORT}`)
+);

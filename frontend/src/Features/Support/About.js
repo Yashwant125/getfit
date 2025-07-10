@@ -1,22 +1,27 @@
 import React from "react";
+import { Box, Typography, Paper, Stack } from "@mui/material";
 
 const About = () => {
   return (
-    <div className="p-4 max-w-3xl mx-auto">
-      <h1 className="text-2xl font-bold mb-4">About GetFit</h1>
-      <p className="mb-2">
-        GetFit is a gym management platform built to help gym owners streamline their operations, track members,
-        manage payments, and grow their fitness businesses more efficiently.
-      </p>
-      <p className="mb-2">
-        Our goal is to create a one-stop solution for gym owners, offering tools to manage memberships, payments,
-        attendance, notifications, and more.
-      </p>
-      <p>
-        GetFit is created by a team of developers with a passion for fitness and technology. We are constantly
-        working to make fitness management easier and more effective for gym owners.
-      </p>
-    </div>
+    <Box sx={{ padding: 3 }}>
+      <Typography variant="h5" fontWeight="bold" gutterBottom>
+        About GetFit
+      </Typography>
+
+      <Paper elevation={3} sx={{ padding: 3, backgroundColor: "#f9f9f9" }}>
+        <Stack spacing={2}>
+          <Typography variant="body1">
+            <strong>GetFit</strong> is a gym management platform built to help gym owners streamline their operations, track members, manage attendance, and grow their fitness businesses efficiently.
+          </Typography>
+          <Typography variant="body1">
+            Our goal is to provide a one-stop solution that includes tools for managing memberships, notifications, and overall gym workflows—so that gym owners can focus more on fitness and less on paperwork.
+          </Typography>
+          <Typography variant="body1">
+            GetFit is created by a team of developers who are passionate about both technology and fitness. We are constantly improving and expanding our platform to make gym management simpler and smarter.
+          </Typography>
+        </Stack>
+      </Paper>
+    </Box>
   );
 };
 

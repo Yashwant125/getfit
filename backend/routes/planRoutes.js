@@ -1,11 +1,14 @@
 const express = require('express');
 const router = express.Router();
-const { addPlan, getPlans } = require('../controllers/planController');
+const { addPlan, getPlans, deletePlan } = require('../controllers/planController');
 
-// Route to add plan
+// Add new plan
 router.post('/', addPlan);
 
-// Route to get all plans
+// Get all plans
 router.get('/', getPlans);
+
+// Delete a plan by ID
+router.delete('/:id', deletePlan);
 
 module.exports = router;

@@ -1,33 +1,90 @@
 import React, { useState, useEffect } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+  useLocation,
+} from "react-router-dom";
+import axios from "axios";
 
+// Components
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Sidebar from "./components/Sidebar";
 
+// Dashboard
 import Dashboard from "./components/Dashboard";
+
+// Members
 import AddMember from "./Features/Members/AddMember";
 import ViewMembers from "./Features/Members/ViewMembers";
+
+// Plans
 import AddPlan from "./Features/MembershipPlan/AddPlan";
 import ViewPlans from "./Features/MembershipPlan/ViewPlans";
+
+// Notifications
 import UnpaidMembers from "./Features/Notifications/UnpaidMembers";
 import ExpiredMembers from "./Features/Notifications/ExpiredMembers";
 import ActiveMembers from "./Features/Notifications/ActiveMembers";
+
+// Feedback
 import FeedbackSection from "./Features/FeedbackSection/Feedback";
+
+// Notify
 import NotifyAll from "./Features/Notify/NotifyAll";
+
+// Owner Profile
 import OwnerProfile from "./Features/OwnerProfile/Profile";
 
-// Support Pages
+// Support
 import CancellationRefund from "./Features/Support/CancellationRefund";
 import TermsAndConditions from "./Features/Support/TermsAndConditions";
 import ContactUs from "./Features/Support/ContactUs";
 import PrivacyPolicy from "./Features/Support/PrivacyPolicy";
 import ShippingPolicy from "./Features/Support/ShippingPolicy";
+import About from "./Features/Support/About";
 
-// New About Page
-import About from "./Features/Support/About"; // Now correctly imported at the top
+// Attendance
+import ScanAttendance from "./Features/Attendance/ScanAttendance";
+import QRCodeDisplay from "./Features/Attendance/QRCodeDisplay";
+import AttendanceList from "./Features/Attendance/AttendanceList";
 
-import axios from "axios";
+// Auth Pages
+import LoginPage from "./Features/Login/LoginPage";
+import SignupPage from "./Features/Login/SignupPage";
+import AdminResetPassword from "./Features/Login/AdminResetPassword";
+
+// Auth check
+const isAuthenticated = () => !!localStorage.getItem("token");
+
+const ProtectedRoute = ({ children }) => {
+  return isAuthenticated() ? children : <Navigate to="/login" />;
+};
+
+const PublicRoute = ({ children }) => {
+  return isAuthenticated() ? <Navigate to="/" /> : children;
+};
+
+const Layout = ({ children, value, setValue, sidebarOpen, setSidebarOpen }) => {
+  const location = useLocation();
+  const hideLayoutOn = ["/login", "/signup", "/forgot-password"];
+  const isMinimal = hideLayoutOn.includes(location.pathname);
+
+  return (
+    <>
+      {!isMinimal && (
+        <>
+          <Navbar setValue={setValue} setSidebarOpen={setSidebarOpen} />
+          <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} setValue={setValue} />
+        </>
+      )}
+      {children}
+      {!isMinimal && <Footer value={value} setValue={setValue} />}
+    </>
+  );
+};
 
 const App = () => {
   const [value, setValue] = useState(0);
@@ -35,55 +92,69 @@ const App = () => {
   const [plans, setPlans] = useState([]);
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
+  // 🔥 Moved out of useEffect so we can pass to ViewPlans
+  const fetchPlans = async () => {
+    try {
+      const res = await axios.get("http://localhost:5000/api/plans");
+      setPlans(res.data);
+    } catch (err) {
+      console.error("❌ Error fetching plans:", err);
+    }
+  };
+
+  const fetchMembers = async () => {
+    try {
+      const res = await axios.get("http://localhost:5000/api/members");
+      setMembers(res.data);
+    } catch (err) {
+      console.error("❌ Error fetching members:", err);
+    }
+  };
+
   useEffect(() => {
-    const fetchPlans = async () => {
-      try {
-        const res = await axios.get("https://getfit-v9g1.onrender.com/api/plans");
-        setPlans(res.data);
-      } catch (err) {
-        console.error("❌ Error fetching plans:", err);
-      }
-    };
-
-    const fetchMembers = async () => {
-      try {
-        const res = await axios.get("https://getfit-v9g1.onrender.com/api/members");
-        setMembers(res.data);
-      } catch (err) {
-        console.error("❌ Error fetching members:", err);
-      }
-    };
-
     fetchPlans();
     fetchMembers();
   }, []);
 
   return (
     <Router>
-      <Navbar setValue={setValue} setSidebarOpen={setSidebarOpen} />
+      <Layout
+        value={value}
+        setValue={setValue}
+        sidebarOpen={sidebarOpen}
+        setSidebarOpen={setSidebarOpen}
+      >
+        <Routes>
+          {/* Auth */}
+          <Route path="/login" element={<PublicRoute><LoginPage /></PublicRoute>} />
+          <Route path="/signup" element={<PublicRoute><SignupPage /></PublicRoute>} />
 
-      <Routes>
-        <Route path="/" element={<Dashboard />} />                         {/* 0 */}
-        <Route path="/add-member" element={<AddMember setMembers={setMembers} />} />     {/* 1 */}
-        <Route path="/view-members" element={<ViewMembers members={members} setMembers={setMembers} />} />  {/* 2 */}
-        <Route path="/add-plan" element={<AddPlan setPlans={setPlans} />} />             {/* 3 */}
-        <Route path="/view-plans" element={<ViewPlans plans={plans} />} />               {/* 4 */}
-        <Route path="/unpaid-members" element={<UnpaidMembers />} />                     {/* 5 */}
-        <Route path="/expired-members" element={<ExpiredMembers />} />                   {/* 6 */}
-        <Route path="/active-members" element={<ActiveMembers />} />                     {/* 7 */}
-        <Route path="/feedback" element={<FeedbackSection />} />                         {/* 8 */}
-        <Route path="/profile" element={<OwnerProfile />} />                             {/* 9 */}
-        <Route path="/notify-all" element={<NotifyAll />} />                             {/* 12 */}
-        <Route path="/cancellation-refund" element={<CancellationRefund />} />           {/* 13 */}
-        <Route path="/terms" element={<TermsAndConditions />} />                         {/* 14 */}
-        <Route path="/contact" element={<ContactUs />} />                                {/* 15 */}
-        <Route path="/privacy" element={<PrivacyPolicy />} />                            {/* 16 */}
-        <Route path="/shipping" element={<ShippingPolicy />} />                          {/* 17 */}
-        <Route path="/about" element={<About />} />                                     {/* 18 */}
-      </Routes>
+          {/* Main */}
+          <Route path="/" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+          <Route path="/add-member" element={<ProtectedRoute><AddMember setMembers={setMembers} /></ProtectedRoute>} />
+          <Route path="/view-members" element={<ProtectedRoute><ViewMembers members={members} setMembers={setMembers} /></ProtectedRoute>} />
+          <Route path="/add-plan" element={<ProtectedRoute><AddPlan setPlans={setPlans} /></ProtectedRoute>} />
+          <Route path="/view-plans" element={<ProtectedRoute><ViewPlans plans={plans} fetchPlans={fetchPlans} /></ProtectedRoute>} />
 
-      <Footer value={value} setValue={setValue} />
-      <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} setValue={setValue} />
+          {/* Other */}
+          <Route path="/unpaid-members" element={<ProtectedRoute><UnpaidMembers /></ProtectedRoute>} />
+          <Route path="/expired-members" element={<ProtectedRoute><ExpiredMembers /></ProtectedRoute>} />
+          <Route path="/active-members" element={<ProtectedRoute><ActiveMembers /></ProtectedRoute>} />
+          <Route path="/feedback" element={<ProtectedRoute><FeedbackSection /></ProtectedRoute>} />
+          <Route path="/notify-all" element={<ProtectedRoute><NotifyAll /></ProtectedRoute>} />
+          <Route path="/profile" element={<ProtectedRoute><OwnerProfile /></ProtectedRoute>} />
+          <Route path="/cancellation-refund" element={<ProtectedRoute><CancellationRefund /></ProtectedRoute>} />
+          <Route path="/terms" element={<ProtectedRoute><TermsAndConditions /></ProtectedRoute>} />
+          <Route path="/contact" element={<ProtectedRoute><ContactUs /></ProtectedRoute>} />
+          <Route path="/privacy" element={<ProtectedRoute><PrivacyPolicy /></ProtectedRoute>} />
+          <Route path="/shipping" element={<ProtectedRoute><ShippingPolicy /></ProtectedRoute>} />
+          <Route path="/about" element={<ProtectedRoute><About /></ProtectedRoute>} />
+          <Route path="/scan-attendance" element={<ProtectedRoute><ScanAttendance /></ProtectedRoute>} />
+          <Route path="/view-qr" element={<ProtectedRoute><QRCodeDisplay /></ProtectedRoute>} />
+          <Route path="/attendance-list" element={<ProtectedRoute><AttendanceList /></ProtectedRoute>} />
+          <Route path="/admin-reset-password" element={<ProtectedRoute><AdminResetPassword /></ProtectedRoute>} />
+        </Routes>
+      </Layout>
     </Router>
   );
 };

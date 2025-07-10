@@ -3,14 +3,19 @@ import {
   Paper,
   Typography,
   Grid,
-  Button,
-  Box,
+  IconButton,
 } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
+import axios from "axios";
 
-const ViewPlans = ({ plans }) => {
-  const handlePurchase = (planId) => {
-    console.log(`Purchase clicked for Plan ID: ${planId}`);
-    // Payment integration logic can come here later
+const ViewPlans = ({ plans, fetchPlans }) => {
+  const handleDelete = async (planId) => {
+    try {
+      await axios.delete(`http://localhost:5000/api/plans/${planId}`);
+      fetchPlans(); // Refresh after deletion
+    } catch (error) {
+      console.error("Error deleting plan:", error.response?.data || error.message);
+    }
   };
 
   return (
@@ -43,6 +48,20 @@ const ViewPlans = ({ plans }) => {
               position: "relative",
             }}
           >
+            {/* 🗑️ Delete icon in top-right corner */}
+            <IconButton
+              aria-label="delete"
+              onClick={() => handleDelete(plan._id)}
+              sx={{
+                position: "absolute",
+                top: 8,
+                right: 8,
+                color: "red",
+              }}
+            >
+              <DeleteIcon />
+            </IconButton>
+
             <Grid container spacing={1}>
               <Grid item xs={12} sm={6}>
                 <strong>Type:</strong> {plan.membershipType}
@@ -54,16 +73,6 @@ const ViewPlans = ({ plans }) => {
                 <strong>Amount:</strong> ₹{plan.amount}
               </Grid>
             </Grid>
-
-            <Box display="flex" justifyContent="flex-end" mt={2}>
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={() => handlePurchase(plan._id)}
-              >
-                Purchase
-              </Button>
-            </Box>
           </Paper>
         ))
       )}
