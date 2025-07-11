@@ -1,22 +1,20 @@
 const Attendance = require("../models/Attendance");
 const Member = require("../models/Member");
 
-// POST /api/attendance/mark
-const markPresent = async (req, res) => {
-  try {
-    const { phone } = req.body;
+// ✅ Mark attendance by phone number
+exports.markAttendance = async (req, res) => {
+  const phone = req.body.phone?.trim(); // Trim input to avoid space issues
+  const today = new Date().toISOString().split("T")[0]; // Format: YYYY-MM-DD
 
-    if (!phone) {
-      return res.status(400).json({ error: "Phone number is required." });
-    }
+  try {
+    // Optional: Log incoming phone for debugging
+    console.log("Marking attendance for phone:", phone);
 
     const member = await Member.findOne({ phone });
     if (!member) {
-      return res.status(404).json({ error: "Member not found with this phone number." });
+      console.log("❌ Member not found with phone:", phone);
+      return res.status(404).json({ error: "Member not found" });
     }
-
-    // Get today's date in YYYY-MM-DD format
-    const today = new Date().toISOString().split("T")[0];
 
     const alreadyMarked = await Attendance.findOne({
       memberId: member._id,
@@ -24,53 +22,35 @@ const markPresent = async (req, res) => {
     });
 
     if (alreadyMarked) {
-      return res.status(400).json({ error: "Attendance already marked today." });
+      return res.status(400).json({ error: "Attendance already marked for today" });
     }
 
-    const attendance = new Attendance({
+    const newAttendance = new Attendance({
       memberId: member._id,
-      date: today, // Save as string: "YYYY-MM-DD"
-      status: "present",
-      markedAt: new Date(), // Full timestamp
+      name: member.name,
+      phone: member.phone,
+      date: today,
+      status: "Present",
     });
 
-    await attendance.save();
-
-    res.status(201).json({ message: `Attendance marked for ${member.name}` });
+    await newAttendance.save();
+    res.status(200).json({ message: "Attendance marked successfully" });
   } catch (err) {
-    console.error("Error marking attendance:", err.message);
-    res.status(500).json({ error: "Server error. Please try again." });
+    console.error("⚠️ Error marking attendance:", err);
+    res.status(500).json({ error: "Server error while marking attendance" });
   }
 };
 
-// GET /api/attendance
-const getAttendance = async (req, res) => {
+// ✅ Get all attendance records (for display)
+exports.getAllAttendance = async (req, res) => {
   try {
-    const { date, status } = req.query;
-    const filter = {};
+    const records = await Attendance.find()
+      .sort({ date: -1 })
+      .populate("memberId", "name phone");
 
-    // Optional date filter (expects "YYYY-MM-DD")
-    if (date) {
-      filter.date = date;
-    }
-
-    // Optional status filter
-    if (status && status !== "all") {
-      filter.status = status;
-    }
-
-    const attendance = await Attendance.find(filter)
-      .populate("memberId", "name registrationNumber phone")
-      .sort({ date: -1 });
-
-    res.status(200).json(attendance);
+    res.json(records);
   } catch (err) {
-    console.error("Error fetching attendance:", err.message);
-    res.status(500).json({ error: "Failed to retrieve attendance data." });
+    console.error("⚠️ Error fetching attendance:", err);
+    res.status(500).json({ error: "Error fetching attendance records" });
   }
-};
-
-module.exports = {
-  markPresent,
-  getAttendance,
 };

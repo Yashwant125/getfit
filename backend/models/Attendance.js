@@ -1,27 +1,26 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-const attendanceSchema = new mongoose.Schema({
-  memberId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Member',
-    required: true,
+const attendanceSchema = new mongoose.Schema(
+  {
+    memberId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Member", // Matches the Member model
+      required: true,
+    },
+    name: String,
+    phone: String,
+    date: {
+      type: String, // Stored as 'YYYY-MM-DD'
+      required: true,
+    },
+    status: {
+      type: String,
+      enum: ["Present", "Absent"],
+      default: "Present",
+    },
   },
-  date: {
-    type: String, // Format: YYYY-MM-DD
-    required: true,
-  },
-  status: {
-    type: String,
-    enum: ['present', 'absent'],
-    default: 'present',
-  },
-  markedAt: {
-    type: Date,
-    default: Date.now,
-  },
-});
+  { timestamps: true }
+);
 
-// Prevent duplicate attendance for the same member on the same date
-attendanceSchema.index({ memberId: 1, date: 1 }, { unique: true });
-
-module.exports = mongoose.model('Attendance', attendanceSchema);
+// ✅ Prevent OverwriteModelError
+module.exports = mongoose.models.Attendance || mongoose.model("Attendance", attendanceSchema);

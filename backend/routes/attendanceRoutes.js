@@ -1,8 +1,10 @@
+// routes/attendanceRoutes.js
+
 const express = require("express");
 const router = express.Router();
-const { markPresent, getAttendance } = require("../controllers/attendanceController");
+const attendanceController = require("../controllers/attendanceController");
 
-router.post("/mark", markPresent);       // POST /api/attendance/mark
-router.get("/", getAttendance);          // GET /api/attendance?status=present
+router.post("/mark", attendanceController.markAttendance);
+router.get("/", attendanceController.getAllAttendance);
 
 module.exports = router;
