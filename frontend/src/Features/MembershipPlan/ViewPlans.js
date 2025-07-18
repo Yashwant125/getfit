@@ -4,9 +4,12 @@ import {
   Typography,
   Grid,
   IconButton,
+  Button,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import axios from "axios";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
 
 const ViewPlans = ({ plans, fetchPlans }) => {
   const handleDelete = async (planId) => {
@@ -16,6 +19,30 @@ const ViewPlans = ({ plans, fetchPlans }) => {
     } catch (error) {
       console.error("Error deleting plan:", error.response?.data || error.message);
     }
+  };
+
+  const downloadPDF = () => {
+    const doc = new jsPDF();
+    doc.setFontSize(18);
+    doc.text("GetFit - Membership Plans", 14, 20);
+
+    const headers = [["#", "Type", "Duration", "Amount "]];
+    const data = plans.map((plan, index) => [
+      index + 1,
+      plan.membershipType || "N/A",
+      plan.duration || "N/A",
+      plan.amount || "N/A",
+    ]);
+
+    doc.autoTable({
+      head: headers,
+      body: data,
+      startY: 30,
+      styles: { fontSize: 11, cellPadding: 3 },
+      headStyles: { fillColor: [22, 160, 133] },
+    });
+
+    doc.save("Membership_Plans_Report.pdf");
   };
 
   return (
@@ -29,9 +56,31 @@ const ViewPlans = ({ plans, fetchPlans }) => {
         mt: 5,
       }}
     >
-      <Typography variant="h6" gutterBottom>
-        All Membership Plans
-      </Typography>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          marginBottom: "20px",
+        }}
+      >
+        <Typography variant="h6">All Membership Plans</Typography>
+        <Button
+          variant="contained"
+          color="primary"
+          size="small"
+          onClick={downloadPDF}
+          sx={{
+            fontSize: "0.75rem",
+            padding: "4px 8px",
+            minWidth: "unset",
+            textTransform: "none",
+          }}
+        >
+          📄 Download PDF
+        </Button>
+      </div>
+
       {plans.length === 0 ? (
         <Typography>No plans available.</Typography>
       ) : (
@@ -48,7 +97,6 @@ const ViewPlans = ({ plans, fetchPlans }) => {
               position: "relative",
             }}
           >
-            {/* 🗑️ Delete icon in top-right corner */}
             <IconButton
               aria-label="delete"
               onClick={() => handleDelete(plan._id)}
@@ -70,7 +118,7 @@ const ViewPlans = ({ plans, fetchPlans }) => {
                 <strong>Duration:</strong> {plan.duration}
               </Grid>
               <Grid item xs={12} sm={6}>
-                <strong>Amount:</strong> ₹{plan.amount}
+                <strong>Amount:</strong> {plan.amount}
               </Grid>
             </Grid>
           </Paper>

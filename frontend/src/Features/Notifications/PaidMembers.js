@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import {
+  Box,
   Card,
   CardContent,
   Typography,
   CircularProgress,
-  Box,
   Divider,
   Alert,
   Button,
@@ -13,32 +13,32 @@ import {
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 
-const ExpiredMembers = () => {
-  const [expiredMembers, setExpiredMembers] = useState([]);
+const PaidMembers = () => {
+  const [activeMembers, setActiveMembers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchExpiredMembers = async () => {
+    const fetchActiveMembers = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/members/expired");
-        setExpiredMembers(response.data);
+        const response = await axios.get("http://localhost:5000/api/members/active");
+        setActiveMembers(response.data);
       } catch (error) {
-        setError("Error fetching expired members.");
-        console.error("Error fetching expired members:", error);
+        setError("Error fetching active members.");
+        console.error("Failed to fetch active members:", error);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchExpiredMembers();
+    fetchActiveMembers();
   }, []);
 
   const handleDownloadPDF = () => {
     const doc = new jsPDF();
-    doc.text("Expired Members Report", 14, 15);
+    doc.text("Paid Members Report", 14, 15);
 
-    const tableData = expiredMembers.map((member, index) => [
+    const tableData = activeMembers.map((member, index) => [
       index + 1,
       member.name,
       member.registrationNumber,
@@ -67,17 +67,17 @@ const ExpiredMembers = () => {
       styles: { fontSize: 8 },
     });
 
-    doc.save("Expired_Members_Report.pdf");
+    doc.save("Paid_Members_Report.pdf");
   };
 
   return (
     <Box p={3}>
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
-        <Typography variant="h5">⌛ Expired Members</Typography>
+        <Typography variant="h5">✅ Paid Members</Typography>
         <Button
           variant="contained"
           color="primary"
-          size="small"
+          size="small" // <-- Reduced size
           sx={{ textTransform: "capitalize" }}
           onClick={handleDownloadPDF}
         >
@@ -89,10 +89,10 @@ const ExpiredMembers = () => {
         <CircularProgress />
       ) : error ? (
         <Alert severity="error">{error}</Alert>
-      ) : expiredMembers.length === 0 ? (
-        <Typography>No expired members found.</Typography>
+      ) : activeMembers.length === 0 ? (
+        <Typography>No active members found.</Typography>
       ) : (
-        expiredMembers.map((member) => (
+        activeMembers.map((member) => (
           <Card key={member._id} sx={{ mb: 2 }}>
             <CardContent>
               <Typography variant="h6">{member.name}</Typography>
@@ -116,4 +116,4 @@ const ExpiredMembers = () => {
   );
 };
 
-export default ExpiredMembers;
+export default PaidMembers;

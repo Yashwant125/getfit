@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import {
+  Box,
   Card,
   CardContent,
   Typography,
   CircularProgress,
-  Box,
   Divider,
   Alert,
+  Button,
 } from "@mui/material";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
 
 const UnpaidMembers = () => {
   const [unpaidMembers, setUnpaidMembers] = useState([]);
@@ -31,11 +34,56 @@ const UnpaidMembers = () => {
     fetchUnpaidMembers();
   }, []);
 
+  const handleDownloadPDF = () => {
+    const doc = new jsPDF();
+    doc.text("Unpaid & Partially Paid Members Report", 14, 15);
+
+    const tableData = unpaidMembers.map((member, index) => [
+      index + 1,
+      member.name,
+      member.registrationNumber,
+      member.phone,
+      member.membershipType,
+      member.status,
+      new Date(member.startDate).toLocaleDateString(),
+      new Date(member.endDate).toLocaleDateString(),
+    ]);
+
+    autoTable(doc, {
+      head: [
+        [
+          "S.No",
+          "Name",
+          "Reg No.",
+          "Phone",
+          "Membership",
+          "Status",
+          "Start Date",
+          "End Date",
+        ],
+      ],
+      body: tableData,
+      startY: 20,
+      styles: { fontSize: 8 },
+    });
+
+    doc.save("Unpaid_Members_Report.pdf");
+  };
+
   return (
     <Box p={3}>
-      <Typography variant="h5" gutterBottom>
-        🧾 Unpaid & Partially Paid Members
-      </Typography>
+      <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
+        <Typography variant="h6">🧾 Unpaid & Partially Paid Members</Typography>
+        <Button
+          variant="contained"
+          color="primary"
+          size="small"
+          onClick={handleDownloadPDF}
+          sx={{ textTransform: "none", px: 2, py: 0.5 }}
+        >
+          📄 Download PDF
+        </Button>
+      </Box>
 
       {loading ? (
         <CircularProgress />

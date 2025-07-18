@@ -26,6 +26,7 @@
     "@testing-library/user-event": "^13.5.0",
     "ajv": "^8.17.1",
     "axios": "^1.8.4",
+    "html2canvas": "^1.4.1",
     "jspdf": "^2.5.1",
     "jspdf-autotable": "^3.5.23",
     "qrcode.react": "^4.2.0",

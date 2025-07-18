@@ -4,23 +4,23 @@ const attendanceSchema = new mongoose.Schema(
   {
     memberId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Member", // Matches the Member model
+      ref: "Member", // ✅ For populate() support
       required: true,
     },
     name: String,
     phone: String,
     date: {
-      type: String, // Stored as 'YYYY-MM-DD'
+      type: String, // Format: YYYY-MM-DD
       required: true,
     },
     status: {
       type: String,
-      enum: ["Present", "Absent"],
+      enum: ["Present", "Absent"], // ✅ Only these values allowed
       default: "Present",
     },
   },
   { timestamps: true }
 );
 
-// ✅ Prevent OverwriteModelError
-module.exports = mongoose.models.Attendance || mongoose.model("Attendance", attendanceSchema);
+module.exports =
+  mongoose.models.Attendance || mongoose.model("Attendance", attendanceSchema);

@@ -52,8 +52,8 @@ exports.login = async (req, res) => {
   }
 };
 
-// POST /api/auth/admin-reset-password
-exports.adminResetPassword = async (req, res) => {
+// POST /api/auth/reset-password
+exports.ResetPassword = async (req, res) => {
   const { phone, newPassword } = req.body;
 
   try {

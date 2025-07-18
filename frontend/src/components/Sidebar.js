@@ -13,7 +13,6 @@ import {
 } from "@mui/material";
 import PeopleIcon from "@mui/icons-material/People";
 import FeedbackIcon from "@mui/icons-material/Feedback";
-import CampaignIcon from "@mui/icons-material/Campaign";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
@@ -21,7 +20,7 @@ import CardMembershipIcon from "@mui/icons-material/CardMembership";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import AttendanceIcon from "@mui/icons-material/EventAvailable";
 import { useNavigate } from "react-router-dom";
-import LogoutPage from "../Features/Logout/LogoutPage"; // ✅ Importing logout component
+import LogoutPage from "../Features/Logout/LogoutPage";
 
 const Sidebar = ({ open, onClose, setValue }) => {
   const [expandedSection, setExpandedSection] = useState(null);
@@ -78,7 +77,7 @@ const Sidebar = ({ open, onClose, setValue }) => {
               <ListItemIcon>
                 <CardMembershipIcon />
               </ListItemIcon>
-              <ListItemText primary="Membership Plans" />
+              <ListItemText primary="Membership" />
               {expandedSection === "plans" ? <ExpandLess /> : <ExpandMore />}
             </ListItemButton>
           </ListItem>
@@ -105,8 +104,8 @@ const Sidebar = ({ open, onClose, setValue }) => {
           </ListItem>
           <Collapse in={expandedSection === "notifications"} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
-              <ListItemButton sx={{ pl: 4 }} onClick={() => handleNavigation("/active-members")}>
-                <ListItemText primary="Active Members" />
+              <ListItemButton sx={{ pl: 4 }} onClick={() => handleNavigation("/paid-members")}>
+                <ListItemText primary="Paid Members" />
               </ListItemButton>
               <ListItemButton sx={{ pl: 4 }} onClick={() => handleNavigation("/unpaid-members")}>
                 <ListItemText primary="Unpaid Members" />
@@ -132,41 +131,19 @@ const Sidebar = ({ open, onClose, setValue }) => {
               <ListItemButton sx={{ pl: 4 }} onClick={() => handleNavigation("/attendance-list")}>
                 <ListItemText primary="Attendance List" />
               </ListItemButton>
-              <ListItemButton sx={{ pl: 4 }} onClick={() => handleNavigation("/present")}>
-                <ListItemText primary="Present" />
-              </ListItemButton>
-              <ListItemButton sx={{ pl: 4 }} onClick={() => handleNavigation("/absent")}>
-                <ListItemText primary="Absent" />
+              <ListItemButton sx={{ pl: 4 }} onClick={() => handleNavigation("/qr-code")}>
+                <ListItemText primary="QR Code" />
               </ListItemButton>
             </List>
           </Collapse>
 
-          {/* Other Pages */}
+          {/* Reset Password */}
           <ListItem disablePadding>
-            <ListItemButton onClick={() => handleNavigation("/feedback")}>
-              <ListItemIcon>
-                <FeedbackIcon />
-              </ListItemIcon>
-              <ListItemText primary="Feedback" />
-            </ListItemButton>
-          </ListItem>
-
-          <ListItem disablePadding>
-            <ListItemButton onClick={() => handleNavigation("/notify-all")}>
-              <ListItemIcon>
-                <CampaignIcon />
-              </ListItemIcon>
-              <ListItemText primary="Notify All" />
-            </ListItemButton>
-          </ListItem>
-
-          {/* ✅ Admin Reset Password */}
-          <ListItem disablePadding>
-            <ListItemButton onClick={() => handleNavigation("/admin-reset-password")}>
+            <ListItemButton onClick={() => handleNavigation("/reset-password")}>
               <ListItemIcon>
                 <AccountBoxIcon />
               </ListItemIcon>
-              <ListItemText primary="Reset Member Password" />
+              <ListItemText primary="Reset Password" />
             </ListItemButton>
           </ListItem>
 

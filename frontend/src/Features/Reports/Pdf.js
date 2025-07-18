@@ -1,47 +1,28 @@
+// src/Reports/Pdf.js
+import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
-import "jspdf-autotable"; // just import, no need to register manually
 
-export const generateMemberPDF = (members) => {
-  const doc = new jsPDF();
-  doc.text("Members Report", 14, 15);
+/**
+ * Captures any given HTML element and exports it as a PDF.
+ * @param {HTMLElement} element - DOM element reference to export
+ * @param {string} filename - PDF file name (default = "download.pdf")
+ */
+export const exportPageAsPDF = async (element, filename = "download.pdf") => {
+  try {
+    const canvas = await html2canvas(element, {
+      useCORS: true,
+      allowTaint: true,
+      scale: 2, // sharper quality
+    });
+    const imgData = canvas.toDataURL("image/png");
 
-  const rows = members.map((m, index) => [
-    index + 1,
-    m.registrationNumber || "-",
-    m.name || "-",
-    m.phone || "-",
-    m.membershipType || "-",
-    m.startDate?.slice(0, 10) || "-",
-    m.endDate?.slice(0, 10) || "-",
-    m.amountPaid || 0,
-    m.status || "-",
-  ]);
+    const pdf = new jsPDF("p", "mm", "a4");
+    const pdfWidth = pdf.internal.pageSize.getWidth();
+    const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
 
-  doc.autoTable({
-    startY: 20,
-    head: [["#", "Reg No", "Name", "Phone", "Type", "Start", "End", "Paid", "Status"]],
-    body: rows,
-  });
-
-  doc.save("members_report.pdf");
-};
-
-export const generateAttendancePDF = (records) => {
-  const doc = new jsPDF();
-  doc.text("Attendance Report", 14, 15);
-
-  const rows = records.map((r, index) => [
-    index + 1,
-    r.memberId?.name || "-",
-    r.memberId?.phone || "-",
-    r.date || "-",
-  ]);
-
-  doc.autoTable({
-    startY: 20,
-    head: [["#", "Name", "Phone", "Date"]],
-    body: rows,
-  });
-
-  doc.save("attendance_report.pdf");
+    pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+    pdf.save(filename);
+  } catch (error) {
+    console.error("PDF export failed:", error);
+  }
 };

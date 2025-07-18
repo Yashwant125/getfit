@@ -18,9 +18,9 @@ const AddPlan = ({ setPlans }) => {
   useEffect(() => {
     const planMap = {
       Silver: { duration: "1 Month", amount: 1000 },
-      Gold: { duration: "3 Months", amount: 2000 },
-      Platinum: { duration: "6 Months", amount: 4000 },
-      Diamond: { duration: "12 Months", amount: 8000 },
+      Gold: { duration: "3 Months", amount: 2400 },
+      Platinum: { duration: "6 Months", amount: 4800 },
+      Diamond: { duration: "12 Months", amount: 9600 },
     };
 
     if (membershipType && planMap[membershipType]) {

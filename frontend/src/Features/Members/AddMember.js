@@ -6,7 +6,6 @@ import {
   Typography,
   Paper,
   Grid,
-  InputLabel,
   FormControl,
   Select,
 } from "@mui/material";
@@ -68,7 +67,6 @@ const AddMember = ({ setMembers }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validation before submission
     if (!membershipOptions.includes(formData.membershipType)) {
       alert("Please select a valid membership type.");
       return;
@@ -174,12 +172,13 @@ const AddMember = ({ setMembers }) => {
 
           <Grid item xs={6}>
             <FormControl fullWidth required>
-              <InputLabel shrink>Status</InputLabel>
               <Select
                 name="status"
                 value={formData.status}
                 onChange={handleChange}
                 displayEmpty
+                variant="outlined"
+                renderValue={(selected) => selected || "Select Status"}
               >
                 {statusOptions.map((option) => (
                   <MenuItem key={option.value} value={option.value}>
@@ -192,16 +191,14 @@ const AddMember = ({ setMembers }) => {
 
           <Grid item xs={6}>
             <FormControl fullWidth required>
-              <InputLabel shrink>Membership Type</InputLabel>
               <Select
                 name="membershipType"
                 value={formData.membershipType}
                 onChange={handleChange}
                 displayEmpty
+                variant="outlined"
+                renderValue={(selected) => selected || "Select Membership Type"}
               >
-                <MenuItem value="" disabled>
-                  Select Membership Type
-                </MenuItem>
                 {membershipOptions.map((type) => (
                   <MenuItem key={type} value={type}>
                     {type}

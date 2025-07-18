@@ -1,6 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import { generateMemberPDF } from '../Reports/Pdf';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
+import { Typography } from "@mui/material";
 
 const ViewMembers = ({ members, setMembers }) => {
   const [loading, setLoading] = useState(true);
@@ -10,11 +12,11 @@ const ViewMembers = ({ members, setMembers }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get('http://localhost:5000/api/members');
+        const res = await axios.get("http://localhost:5000/api/members");
         setMembers(res.data);
       } catch (error) {
-        console.error('Error fetching members:', error);
-        setError(error.response?.data?.error || 'Failed to load members data.');
+        console.error("Error fetching members:", error);
+        setError(error.response?.data?.error || "Failed to load members data.");
       } finally {
         setLoading(false);
       }
@@ -35,8 +37,7 @@ const ViewMembers = ({ members, setMembers }) => {
     const startDate = new Date(start);
     const endDate = new Date(end);
     return (
-      endDate.getMonth() -
-      startDate.getMonth() +
+      endDate.getMonth() - startDate.getMonth() +
       12 * (endDate.getFullYear() - startDate.getFullYear())
     );
   };
@@ -50,40 +51,99 @@ const ViewMembers = ({ members, setMembers }) => {
         status: editingMember.status?.toLowerCase(),
       };
 
-      const res = await axios.put(`http://localhost:5000/api/members/${updatedMember._id}`, updatedMember);
+      const res = await axios.put(
+        `http://localhost:5000/api/members/${updatedMember._id}`,
+        updatedMember
+      );
 
       setMembers((prev) =>
-        prev.map((m) => (m._id === updatedMember._id ? { ...m, ...res.data } : m))
+        prev.map((m) =>
+          m._id === updatedMember._id ? { ...m, ...res.data } : m
+        )
       );
       setEditingMember(null);
     } catch (error) {
-      console.error('Error updating member:', error);
-      alert(error.response?.data?.error || 'Failed to update member.');
+      console.error("Error updating member:", error);
+      alert(error.response?.data?.error || "Failed to update member.");
     }
   };
 
   const handleDelete = async (id) => {
-    const confirm = window.confirm('Are you sure you want to delete this member?');
+    const confirm = window.confirm(
+      "Are you sure you want to delete this member?"
+    );
     if (!confirm) return;
 
     try {
       await axios.delete(`http://localhost:5000/api/members/${id}`);
       setMembers((prev) => prev.filter((m) => m._id !== id));
     } catch (error) {
-      console.error('Error deleting member:', error);
-      alert(error.response?.data?.error || 'Failed to delete member.');
+      console.error("Error deleting member:", error);
+      alert(error.response?.data?.error || "Failed to delete member.");
     }
+  };
+
+  const downloadAsPDF = () => {
+    const doc = new jsPDF();
+    doc.setFontSize(18);
+    doc.text("GetFit - Members Report", 14, 20);
+
+    const headers = [
+      ["#", "Reg No", "Name", "Phone", "Membership", "From", "To", "Amount", "Status"]
+    ];
+    const rows = members.map((member, index) => [
+      index + 1,
+      member.registrationNumber || "-",
+      member.name || "-",
+      member.phone || "-",
+      member.membershipType || "-",
+      member.startDate?.slice(0, 10) || "-",
+      member.endDate?.slice(0, 10) || "-",
+      `${member.amountPaid || 0}`,
+      member.status || "-"
+    ]);
+
+    doc.autoTable({
+      head: headers,
+      body: rows,
+      startY: 30,
+      styles: { fontSize: 9, cellPadding: 3 },
+      headStyles: { fillColor: [22, 160, 133] },
+    });
+
+    doc.save("Members_Report.pdf");
   };
 
   if (loading) return <p>Loading members...</p>;
   if (error) return <p>{error}</p>;
 
   return (
-    <div style={{ padding: "1rem" }}>
-      <h2>All Members</h2>
-      <button onClick={() => generateMemberPDF(members)} style={{ marginBottom: "15px" }}>
-        📄 Download PDF
-      </button>
+    <div style={{ padding: "1rem", paddingBottom: "6rem" }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          marginBottom: "15px",
+        }}
+      >
+        <Typography variant="h5" gutterBottom>
+          All Members
+        </Typography>
+        <button
+          onClick={downloadAsPDF}
+          style={{
+            padding: "6px 12px",
+            backgroundColor: "#007bff",
+            color: "#fff",
+            border: "none",
+            borderRadius: "4px",
+            cursor: "pointer",
+          }}
+        >
+          📄 Download PDF
+        </button>
+      </div>
 
       {members.length === 0 ? (
         <p>No members found.</p>
@@ -92,69 +152,165 @@ const ViewMembers = ({ members, setMembers }) => {
           <div
             key={member._id}
             style={{
-              border: '1px solid #ddd',
-              padding: '10px',
-              marginBottom: '10px',
-              borderRadius: '8px',
-              backgroundColor: '#f9f9f9',
+              border: "1px solid #ddd",
+              padding: "10px",
+              marginBottom: "10px",
+              borderRadius: "8px",
+              backgroundColor: "#f9f9f9",
             }}
           >
             {editingMember && editingMember._id === member._id ? (
               <div>
-                {/* Editable Form */}
-                {/* ...same as before... */}
-                <label><strong>Reg No:</strong>
-                  <input type="text" value={editingMember.registrationNumber}
-                    onChange={(e) => setEditingMember({ ...editingMember, registrationNumber: e.target.value })} />
-                </label><br />
-                <label><strong>Name:</strong>
-                  <input type="text" value={editingMember.name}
-                    onChange={(e) => setEditingMember({ ...editingMember, name: e.target.value })} />
-                </label><br />
-                <label><strong>Phone:</strong>
-                  <input type="text" value={editingMember.phone}
-                    onChange={(e) => setEditingMember({ ...editingMember, phone: e.target.value })} />
-                </label><br />
-                <label><strong>Membership:</strong>
-                  <input type="text" value={editingMember.membershipType}
-                    onChange={(e) => setEditingMember({ ...editingMember, membershipType: e.target.value })} />
-                </label><br />
-                <label><strong>Start Date:</strong>
-                  <input type="date" value={editingMember.startDate}
-                    onChange={(e) => setEditingMember({ ...editingMember, startDate: e.target.value })} />
-                </label><br />
-                <label><strong>Duration (months):</strong>
-                  <input type="number" value={editingMember.membershipDuration}
-                    onChange={(e) => setEditingMember({ ...editingMember, membershipDuration: e.target.value })} />
-                </label><br />
-                <label><strong>Amount Paid:</strong>
-                  <input type="number" value={editingMember.amountPaid}
-                    onChange={(e) => setEditingMember({ ...editingMember, amountPaid: e.target.value })} />
-                </label><br />
-                <label><strong>Status:</strong>
-                  <select value={editingMember.status}
-                    onChange={(e) => setEditingMember({ ...editingMember, status: e.target.value })}>
+                <label>
+                  <strong>Reg No:</strong>
+                  <input
+                    type="text"
+                    value={editingMember.registrationNumber}
+                    onChange={(e) =>
+                      setEditingMember({
+                        ...editingMember,
+                        registrationNumber: e.target.value,
+                      })
+                    }
+                  />
+                </label>
+                <br />
+                <label>
+                  <strong>Name:</strong>
+                  <input
+                    type="text"
+                    value={editingMember.name}
+                    onChange={(e) =>
+                      setEditingMember({
+                        ...editingMember,
+                        name: e.target.value,
+                      })
+                    }
+                  />
+                </label>
+                <br />
+                <label>
+                  <strong>Phone:</strong>
+                  <input
+                    type="text"
+                    value={editingMember.phone}
+                    onChange={(e) =>
+                      setEditingMember({
+                        ...editingMember,
+                        phone: e.target.value,
+                      })
+                    }
+                  />
+                </label>
+                <br />
+                <label>
+                  <strong>Membership:</strong>
+                  <input
+                    type="text"
+                    value={editingMember.membershipType}
+                    onChange={(e) =>
+                      setEditingMember({
+                        ...editingMember,
+                        membershipType: e.target.value,
+                      })
+                    }
+                  />
+                </label>
+                <br />
+                <label>
+                  <strong>Start Date:</strong>
+                  <input
+                    type="date"
+                    value={editingMember.startDate}
+                    onChange={(e) =>
+                      setEditingMember({
+                        ...editingMember,
+                        startDate: e.target.value,
+                      })
+                    }
+                  />
+                </label>
+                <br />
+                <label>
+                  <strong>Duration (months):</strong>
+                  <input
+                    type="number"
+                    value={editingMember.membershipDuration}
+                    onChange={(e) =>
+                      setEditingMember({
+                        ...editingMember,
+                        membershipDuration: e.target.value,
+                      })
+                    }
+                  />
+                </label>
+                <br />
+                <label>
+                  <strong>Amount Paid:</strong>
+                  <input
+                    type="number"
+                    value={editingMember.amountPaid}
+                    onChange={(e) =>
+                      setEditingMember({
+                        ...editingMember,
+                        amountPaid: e.target.value,
+                      })
+                    }
+                  />
+                </label>
+                <br />
+                <label>
+                  <strong>Status:</strong>
+                  <select
+                    value={editingMember.status}
+                    onChange={(e) =>
+                      setEditingMember({
+                        ...editingMember,
+                        status: e.target.value,
+                      })
+                    }
+                  >
                     <option value="paid">Paid</option>
                     <option value="unpaid">Unpaid</option>
                     <option value="partially paid">Partially Paid</option>
                   </select>
-                </label><br />
-                <button onClick={handleSaveEdit} style={{ backgroundColor: '#28a745', color: '#fff' }}>Save Changes</button>
-                <button onClick={() => setEditingMember(null)} style={{ marginLeft: '10px' }}>Cancel</button>
+                </label>
+                <br />
+                <button
+                  onClick={handleSaveEdit}
+                  style={{ backgroundColor: "#28a745", color: "#fff" }}
+                >
+                  Save Changes
+                </button>
+                <button
+                  onClick={() => setEditingMember(null)}
+                  style={{ marginLeft: "10px" }}
+                >
+                  Cancel
+                </button>
               </div>
             ) : (
               <div>
-                {/* Read-only View */}
                 <p><strong>Reg No:</strong> {member.registrationNumber}</p>
                 <p><strong>Name:</strong> {member.name}</p>
                 <p><strong>Phone:</strong> {member.phone}</p>
                 <p><strong>Membership:</strong> {member.membershipType}</p>
                 <p><strong>Valid From:</strong> {member.startDate?.slice(0, 10)}</p>
                 <p><strong>Valid To:</strong> {member.endDate?.slice(0, 10)}</p>
-                <p><strong>Amount Paid:</strong> ₹{member.amountPaid || 0}</p>
+                <p><strong>Amount Paid:</strong> {member.amountPaid || 0}</p>
                 <p><strong>Status:</strong> {member.status}</p>
-                <button onClick={() => handleEditMember(member)} style={{ backgroundColor: '#ffc107', marginRight: '10px' }}>✏️ Edit</button>
-                <button onClick={() => handleDelete(member._id)} style={{ backgroundColor: '#dc3545', color: '#fff' }}>🗑️ Delete</button>
+                <button
+                  onClick={() => handleEditMember(member)}
+                  style={{ backgroundColor: "#ffc107", marginRight: "10px" }}
+                >
+                  ✏️ Edit
+                </button>
+                <button
+                  onClick={() => handleDelete(member._id)}
+                  style={{ backgroundColor: "#dc3545", color: "#fff" }}
+                >
+                  🗑️ Delete
+                </button>
               </div>
             )}
           </div>

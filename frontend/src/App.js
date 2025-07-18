@@ -27,13 +27,7 @@ import ViewPlans from "./Features/MembershipPlan/ViewPlans";
 // Notifications
 import UnpaidMembers from "./Features/Notifications/UnpaidMembers";
 import ExpiredMembers from "./Features/Notifications/ExpiredMembers";
-import ActiveMembers from "./Features/Notifications/ActiveMembers";
-
-// Feedback
-import FeedbackSection from "./Features/FeedbackSection/Feedback";
-
-// Notify
-import NotifyAll from "./Features/Notify/NotifyAll";
+import PaidMembers from "./Features/Notifications/PaidMembers";
 
 // Owner Profile
 import OwnerProfile from "./Features/OwnerProfile/Profile";
@@ -54,7 +48,7 @@ import AttendanceList from "./Features/Attendance/AttendanceList";
 // Auth Pages
 import LoginPage from "./Features/Login/LoginPage";
 import SignupPage from "./Features/Login/SignupPage";
-import AdminResetPassword from "./Features/Login/AdminResetPassword";
+import ResetPassword from "./Features/Login/ResetPassword";
 
 // Auth check
 const isAuthenticated = () => !!localStorage.getItem("token");
@@ -92,7 +86,6 @@ const App = () => {
   const [plans, setPlans] = useState([]);
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  // 🔥 Moved out of useEffect so we can pass to ViewPlans
   const fetchPlans = async () => {
     try {
       const res = await axios.get("http://localhost:5000/api/plans");
@@ -136,23 +129,29 @@ const App = () => {
           <Route path="/add-plan" element={<ProtectedRoute><AddPlan setPlans={setPlans} /></ProtectedRoute>} />
           <Route path="/view-plans" element={<ProtectedRoute><ViewPlans plans={plans} fetchPlans={fetchPlans} /></ProtectedRoute>} />
 
-          {/* Other */}
+          {/* Notifications & Others */}
           <Route path="/unpaid-members" element={<ProtectedRoute><UnpaidMembers /></ProtectedRoute>} />
           <Route path="/expired-members" element={<ProtectedRoute><ExpiredMembers /></ProtectedRoute>} />
-          <Route path="/active-members" element={<ProtectedRoute><ActiveMembers /></ProtectedRoute>} />
-          <Route path="/feedback" element={<ProtectedRoute><FeedbackSection /></ProtectedRoute>} />
-          <Route path="/notify-all" element={<ProtectedRoute><NotifyAll /></ProtectedRoute>} />
+          <Route path="/paid-members" element={<ProtectedRoute><PaidMembers /></ProtectedRoute>} />
+
+          {/* Owner */}
           <Route path="/profile" element={<ProtectedRoute><OwnerProfile /></ProtectedRoute>} />
+
+          {/* Support */}
           <Route path="/cancellation-refund" element={<ProtectedRoute><CancellationRefund /></ProtectedRoute>} />
           <Route path="/terms" element={<ProtectedRoute><TermsAndConditions /></ProtectedRoute>} />
           <Route path="/contact" element={<ProtectedRoute><ContactUs /></ProtectedRoute>} />
           <Route path="/privacy" element={<ProtectedRoute><PrivacyPolicy /></ProtectedRoute>} />
           <Route path="/shipping" element={<ProtectedRoute><ShippingPolicy /></ProtectedRoute>} />
           <Route path="/about" element={<ProtectedRoute><About /></ProtectedRoute>} />
+
+          {/* Attendance */}
           <Route path="/scan-attendance" element={<ProtectedRoute><ScanAttendance /></ProtectedRoute>} />
-          <Route path="/view-qr" element={<ProtectedRoute><QRCodeDisplay /></ProtectedRoute>} />
+          <Route path="/qr-code" element={<ProtectedRoute><QRCodeDisplay /></ProtectedRoute>} />
           <Route path="/attendance-list" element={<ProtectedRoute><AttendanceList /></ProtectedRoute>} />
-          <Route path="/admin-reset-password" element={<ProtectedRoute><AdminResetPassword /></ProtectedRoute>} />
+
+          {/* Reset password */}
+          <Route path="/reset-password" element={<ProtectedRoute><ResetPassword /></ProtectedRoute>} />
         </Routes>
       </Layout>
     </Router>

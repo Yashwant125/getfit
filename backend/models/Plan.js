@@ -13,7 +13,7 @@ const planSchema = new mongoose.Schema({
   },
   amount: {
     type: Number,
-    enum: [1000, 2000, 4000, 8000],
+    enum: [1000, 2400, 4800, 9600],
     required: true
   }
 }, { timestamps: true });

@@ -10,7 +10,7 @@ import {
 } from '@mui/material';
 import axios from 'axios';
 
-const AdminResetPassword = () => {
+const ResetPassword = () => {
   const [phone, setPhone] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -23,7 +23,7 @@ const AdminResetPassword = () => {
 
     try {
       setLoading(true);
-      const res = await axios.post('http://localhost:5000/api/auth/admin-reset-password', {
+      const res = await axios.post('http://localhost:5000/api/auth/reset-password', {
         phone,
         newPassword,
       });
@@ -41,13 +41,13 @@ const AdminResetPassword = () => {
     <Container maxWidth="sm">
       <Paper elevation={3} sx={{ padding: 4, mt: 8 }}>
         <Typography variant="h5" align="center" fontWeight="bold" gutterBottom>
-          Admin Reset Member Password
+          Reset Password
         </Typography>
 
         <Box>
           <TextField
             fullWidth
-            label="Member Phone Number"
+            label="Phone Number"
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
             margin="normal"
@@ -77,4 +77,4 @@ const AdminResetPassword = () => {
   );
 };
 
-export default AdminResetPassword;
+export default ResetPassword;
