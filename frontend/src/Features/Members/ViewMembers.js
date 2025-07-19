@@ -37,7 +37,8 @@ const ViewMembers = ({ members, setMembers }) => {
     const startDate = new Date(start);
     const endDate = new Date(end);
     return (
-      endDate.getMonth() - startDate.getMonth() +
+      endDate.getMonth() -
+      startDate.getMonth() +
       12 * (endDate.getFullYear() - startDate.getFullYear())
     );
   };
@@ -89,7 +90,17 @@ const ViewMembers = ({ members, setMembers }) => {
     doc.text("GetFit - Members Report", 14, 20);
 
     const headers = [
-      ["#", "Reg No", "Name", "Phone", "Membership", "From", "To", "Amount", "Status"]
+      [
+        "#",
+        "Reg No",
+        "Name",
+        "Phone",
+        "Membership",
+        "From",
+        "To",
+        "Amount",
+        "Status",
+      ],
     ];
     const rows = members.map((member, index) => [
       index + 1,
@@ -100,7 +111,7 @@ const ViewMembers = ({ members, setMembers }) => {
       member.startDate?.slice(0, 10) || "-",
       member.endDate?.slice(0, 10) || "-",
       `${member.amountPaid || 0}`,
-      member.status || "-"
+      member.status || "-",
     ]);
 
     doc.autoTable({
@@ -291,23 +302,55 @@ const ViewMembers = ({ members, setMembers }) => {
               </div>
             ) : (
               <div>
-                <p><strong>Reg No:</strong> {member.registrationNumber}</p>
-                <p><strong>Name:</strong> {member.name}</p>
-                <p><strong>Phone:</strong> {member.phone}</p>
-                <p><strong>Membership:</strong> {member.membershipType}</p>
-                <p><strong>Valid From:</strong> {member.startDate?.slice(0, 10)}</p>
-                <p><strong>Valid To:</strong> {member.endDate?.slice(0, 10)}</p>
-                <p><strong>Amount Paid:</strong> {member.amountPaid || 0}</p>
-                <p><strong>Status:</strong> {member.status}</p>
+                <p>
+                  <strong>Reg No:</strong> {member.registrationNumber}
+                </p>
+                <p>
+                  <strong>Name:</strong> {member.name}
+                </p>
+                <p>
+                  <strong>Phone:</strong> {member.phone}
+                </p>
+                <p>
+                  <strong>Membership:</strong> {member.membershipType}
+                </p>
+                <p>
+                  <strong>Valid From:</strong> {member.startDate?.slice(0, 10)}
+                </p>
+                <p>
+                  <strong>Valid To:</strong> {member.endDate?.slice(0, 10)}
+                </p>
+                <p>
+                  <strong>Amount Paid:</strong> {member.amountPaid || 0}
+                </p>
+                <p>
+                  <strong>Status:</strong> {member.status}
+                </p>
                 <button
                   onClick={() => handleEditMember(member)}
-                  style={{ backgroundColor: "#ffc107", marginRight: "10px" }}
+                  style={{
+                    backgroundColor: "#ffc107",
+                    color: "#000",
+                    marginRight: "10px",
+                    border: "none", // ⬅️ Remove outline
+                    padding: "6px 10px",
+                    borderRadius: "4px",
+                    cursor: "pointer",
+                  }}
                 >
                   ✏️ Edit
                 </button>
+
                 <button
                   onClick={() => handleDelete(member._id)}
-                  style={{ backgroundColor: "#dc3545", color: "#fff" }}
+                  style={{
+                    backgroundColor: "#dc3545",
+                    color: "#fff",
+                    border: "none", // ⬅️ Remove outline
+                    padding: "6px 10px",
+                    borderRadius: "4px",
+                    cursor: "pointer",
+                  }}
                 >
                   🗑️ Delete
                 </button>

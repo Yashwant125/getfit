@@ -37,12 +37,29 @@ const Sidebar = ({ open, onClose, setValue }) => {
   };
 
   return (
-    <Drawer
-      anchor="right"
-      open={open}
-      onClose={onClose}
-      PaperProps={{ sx: { width: 260, background: "#fff", color: "#000" } }}
-    >
+   <Drawer
+  anchor="right"
+  open={open}
+  onClose={onClose}
+  variant="temporary"
+  ModalProps={{ keepMounted: true }}
+  PaperProps={{
+    sx: {
+      width: '100vw',
+      height: '100vh',
+      position: 'fixed',
+      top: 10,
+      right: 0,
+      zIndex: 1100,
+      backgroundColor: '#fff',
+    },
+  }}
+  sx={{
+    zIndex: 1100,
+  }}
+>
+
+
       <Box sx={{ padding: 2 }}>
         <Typography variant="h6" sx={{ fontWeight: 600 }}>
           Settings
@@ -60,12 +77,22 @@ const Sidebar = ({ open, onClose, setValue }) => {
               {expandedSection === "members" ? <ExpandLess /> : <ExpandMore />}
             </ListItemButton>
           </ListItem>
-          <Collapse in={expandedSection === "members"} timeout="auto" unmountOnExit>
+          <Collapse
+            in={expandedSection === "members"}
+            timeout="auto"
+            unmountOnExit
+          >
             <List component="div" disablePadding>
-              <ListItemButton sx={{ pl: 4 }} onClick={() => handleNavigation("/add-member")}>
+              <ListItemButton
+                sx={{ pl: 4 }}
+                onClick={() => handleNavigation("/add-member")}
+              >
                 <ListItemText primary="Add Members" />
               </ListItemButton>
-              <ListItemButton sx={{ pl: 4 }} onClick={() => handleNavigation("/view-members")}>
+              <ListItemButton
+                sx={{ pl: 4 }}
+                onClick={() => handleNavigation("/view-members")}
+              >
                 <ListItemText primary="View Members" />
               </ListItemButton>
             </List>
@@ -81,12 +108,22 @@ const Sidebar = ({ open, onClose, setValue }) => {
               {expandedSection === "plans" ? <ExpandLess /> : <ExpandMore />}
             </ListItemButton>
           </ListItem>
-          <Collapse in={expandedSection === "plans"} timeout="auto" unmountOnExit>
+          <Collapse
+            in={expandedSection === "plans"}
+            timeout="auto"
+            unmountOnExit
+          >
             <List component="div" disablePadding>
-              <ListItemButton sx={{ pl: 4 }} onClick={() => handleNavigation("/add-plan")}>
+              <ListItemButton
+                sx={{ pl: 4 }}
+                onClick={() => handleNavigation("/add-plan")}
+              >
                 <ListItemText primary="Add Plan" />
               </ListItemButton>
-              <ListItemButton sx={{ pl: 4 }} onClick={() => handleNavigation("/view-plans")}>
+              <ListItemButton
+                sx={{ pl: 4 }}
+                onClick={() => handleNavigation("/view-plans")}
+              >
                 <ListItemText primary="View Plans" />
               </ListItemButton>
             </List>
@@ -99,18 +136,35 @@ const Sidebar = ({ open, onClose, setValue }) => {
                 <NotificationsIcon />
               </ListItemIcon>
               <ListItemText primary="Notifications" />
-              {expandedSection === "notifications" ? <ExpandLess /> : <ExpandMore />}
+              {expandedSection === "notifications" ? (
+                <ExpandLess />
+              ) : (
+                <ExpandMore />
+              )}
             </ListItemButton>
           </ListItem>
-          <Collapse in={expandedSection === "notifications"} timeout="auto" unmountOnExit>
+          <Collapse
+            in={expandedSection === "notifications"}
+            timeout="auto"
+            unmountOnExit
+          >
             <List component="div" disablePadding>
-              <ListItemButton sx={{ pl: 4 }} onClick={() => handleNavigation("/paid-members")}>
+              <ListItemButton
+                sx={{ pl: 4 }}
+                onClick={() => handleNavigation("/paid-members")}
+              >
                 <ListItemText primary="Paid Members" />
               </ListItemButton>
-              <ListItemButton sx={{ pl: 4 }} onClick={() => handleNavigation("/unpaid-members")}>
+              <ListItemButton
+                sx={{ pl: 4 }}
+                onClick={() => handleNavigation("/unpaid-members")}
+              >
                 <ListItemText primary="Unpaid Members" />
               </ListItemButton>
-              <ListItemButton sx={{ pl: 4 }} onClick={() => handleNavigation("/expired-members")}>
+              <ListItemButton
+                sx={{ pl: 4 }}
+                onClick={() => handleNavigation("/expired-members")}
+              >
                 <ListItemText primary="Expired Members" />
               </ListItemButton>
             </List>
@@ -123,15 +177,29 @@ const Sidebar = ({ open, onClose, setValue }) => {
                 <AttendanceIcon />
               </ListItemIcon>
               <ListItemText primary="Attendance" />
-              {expandedSection === "attendance" ? <ExpandLess /> : <ExpandMore />}
+              {expandedSection === "attendance" ? (
+                <ExpandLess />
+              ) : (
+                <ExpandMore />
+              )}
             </ListItemButton>
           </ListItem>
-          <Collapse in={expandedSection === "attendance"} timeout="auto" unmountOnExit>
+          <Collapse
+            in={expandedSection === "attendance"}
+            timeout="auto"
+            unmountOnExit
+          >
             <List component="div" disablePadding>
-              <ListItemButton sx={{ pl: 4 }} onClick={() => handleNavigation("/attendance-list")}>
+              <ListItemButton
+                sx={{ pl: 4 }}
+                onClick={() => handleNavigation("/attendance-list")}
+              >
                 <ListItemText primary="Attendance List" />
               </ListItemButton>
-              <ListItemButton sx={{ pl: 4 }} onClick={() => handleNavigation("/qr-code")}>
+              <ListItemButton
+                sx={{ pl: 4 }}
+                onClick={() => handleNavigation("/qr-code")}
+              >
                 <ListItemText primary="QR Code" />
               </ListItemButton>
             </List>
@@ -174,24 +242,46 @@ const Sidebar = ({ open, onClose, setValue }) => {
               {expandedSection === "support" ? <ExpandLess /> : <ExpandMore />}
             </ListItemButton>
           </ListItem>
-          <Collapse in={expandedSection === "support"} timeout="auto" unmountOnExit>
+          <Collapse
+            in={expandedSection === "support"}
+            timeout="auto"
+            unmountOnExit
+          >
             <List component="div" disablePadding>
-              <ListItemButton sx={{ pl: 4 }} onClick={() => handleNavigation("/terms")}>
+              <ListItemButton
+                sx={{ pl: 4 }}
+                onClick={() => handleNavigation("/terms")}
+              >
                 <ListItemText primary="Terms and Conditions" />
               </ListItemButton>
-              <ListItemButton sx={{ pl: 4 }} onClick={() => handleNavigation("/contact")}>
+              <ListItemButton
+                sx={{ pl: 4 }}
+                onClick={() => handleNavigation("/contact")}
+              >
                 <ListItemText primary="Contact Us" />
               </ListItemButton>
-              <ListItemButton sx={{ pl: 4 }} onClick={() => handleNavigation("/privacy")}>
+              <ListItemButton
+                sx={{ pl: 4 }}
+                onClick={() => handleNavigation("/privacy")}
+              >
                 <ListItemText primary="Privacy Policy" />
               </ListItemButton>
-              <ListItemButton sx={{ pl: 4 }} onClick={() => handleNavigation("/shipping")}>
+              <ListItemButton
+                sx={{ pl: 4 }}
+                onClick={() => handleNavigation("/shipping")}
+              >
                 <ListItemText primary="Shipping Policy" />
               </ListItemButton>
-              <ListItemButton sx={{ pl: 4 }} onClick={() => handleNavigation("/cancellation-refund")}>
+              <ListItemButton
+                sx={{ pl: 4 }}
+                onClick={() => handleNavigation("/cancellation-refund")}
+              >
                 <ListItemText primary="Cancellation and Refund" />
               </ListItemButton>
-              <ListItemButton sx={{ pl: 4 }} onClick={() => handleNavigation("/about")}>
+              <ListItemButton
+                sx={{ pl: 4 }}
+                onClick={() => handleNavigation("/about")}
+              >
                 <ListItemText primary="About Us" />
               </ListItemButton>
             </List>
