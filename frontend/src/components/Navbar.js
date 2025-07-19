@@ -13,14 +13,13 @@ import FitnessCenterIcon from "@mui/icons-material/FitnessCenter";
 const Navbar = () => {
   return (
     <AppBar
-      position="static"
+      position="fixed"
       sx={{
-        background: "linear-gradient(-45deg, #ff4e50, #f9d423, #ff4e50, #f9d423)",
-        backgroundSize: "400% 400%",
-        animation: "gradientMove 8s ease infinite",
+        backgroundColor: "#ff9800", // solid orange
         paddingY: 1,
         borderBottom: "2px solid #fff",
-        boxShadow: "0 4px 15px rgba(255, 105, 180, 0.5)",
+        boxShadow: "0 4px 10px rgba(0,0,0,0.3)",
+        zIndex: 1300,
       }}
     >
       <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
@@ -31,7 +30,6 @@ const Navbar = () => {
               fontSize: 40,
               color: "black",
               mr: 1,
-              filter: "drop-shadow(2px 2px 3px rgba(255,255,255,0.5))",
             }}
           />
           <Typography
@@ -39,7 +37,6 @@ const Navbar = () => {
             sx={{
               color: "#fff",
               fontWeight: 600,
-              textShadow: "1px 1px 2px rgba(0,0,0,0.5)",
             }}
           >
             GetFit
@@ -49,27 +46,13 @@ const Navbar = () => {
         {/* Icons */}
         <Box>
           <IconButton>
-            <NotificationsIcon
-              sx={{ color: "#fff", textShadow: "1px 1px 2px rgba(0,0,0,0.5)" }}
-            />
+            <NotificationsIcon sx={{ color: "#fff" }} />
           </IconButton>
           <IconButton>
-            <AccountCircleIcon
-              sx={{ color: "#fff", textShadow: "1px 1px 2px rgba(0,0,0,0.5)" }}
-            />
+            <AccountCircleIcon sx={{ color: "#fff" }} />
           </IconButton>
         </Box>
       </Toolbar>
-
-      <style>
-        {`
-          @keyframes gradientMove {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-          }
-        `}
-      </style>
     </AppBar>
   );
 };

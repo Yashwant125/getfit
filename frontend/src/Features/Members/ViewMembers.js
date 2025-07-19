@@ -118,7 +118,7 @@ const ViewMembers = ({ members, setMembers }) => {
   if (error) return <p>{error}</p>;
 
   return (
-    <div style={{ padding: "1rem", paddingBottom: "6rem" }}>
+    <div style={{ padding: "1rem", paddingBottom: "1rem" }}>
       <div
         style={{
           display: "flex",

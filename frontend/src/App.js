@@ -74,7 +74,9 @@ const Layout = ({ children, value, setValue, sidebarOpen, setSidebarOpen }) => {
           <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} setValue={setValue} />
         </>
       )}
-      {children}
+      <div style={{ paddingTop: isMinimal ? 0 : "5rem", paddingBottom: isMinimal ? 0 : "4rem" }}>
+        {children}
+      </div>
       {!isMinimal && <Footer value={value} setValue={setValue} />}
     </>
   );
