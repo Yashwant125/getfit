@@ -50,6 +50,9 @@ import LoginPage from "./Features/Login/LoginPage";
 import SignupPage from "./Features/Login/SignupPage";
 import ResetPassword from "./Features/Login/ResetPassword";
 
+import InvoicePage from "./Features/Invoice/InvoicePage";
+
+
 // Auth check
 const isAuthenticated = () => !!localStorage.getItem("token");
 
@@ -154,6 +157,9 @@ const App = () => {
 
           {/* Reset password */}
           <Route path="/reset-password" element={<ProtectedRoute><ResetPassword /></ProtectedRoute>} />
+
+          <Route path="/generate-invoice" element={<ProtectedRoute><InvoicePage /></ProtectedRoute>} />
+
         </Routes>
       </Layout>
     </Router>

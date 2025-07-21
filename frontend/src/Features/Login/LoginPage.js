@@ -30,8 +30,14 @@ const LoginPage = () => {
         phone,
         password,
       });
-      localStorage.setItem("token", res.data.token);
-      localStorage.setItem("user", JSON.stringify(res.data.user));
+
+      const { token, user } = res.data;
+
+      // Save token, user, and ownerId for secure session
+      localStorage.setItem("token", token);
+      localStorage.setItem("user", JSON.stringify(user));
+      localStorage.setItem("ownerId", user.ownerId); // this is key for filtering data
+
       alert("Login successful");
       navigate("/");
     } catch (err) {
@@ -52,6 +58,7 @@ const LoginPage = () => {
           backgroundColor: "#fafafa",
         }}
       >
+        {/* Logo */}
         <Box display="flex" alignItems="center" justifyContent="center" mb={3}>
           <FitnessCenterIcon sx={{ fontSize: 36, color: "#1976d2", mr: 1 }} />
           <Typography variant="h4" fontWeight="700" fontFamily="monospace">
@@ -59,6 +66,7 @@ const LoginPage = () => {
           </Typography>
         </Box>
 
+        {/* Login Form */}
         <Box component="form" onSubmit={handleSubmit}>
           <TextField
             fullWidth
@@ -96,7 +104,7 @@ const LoginPage = () => {
           </Button>
         </Box>
 
-        {/* Forgot password section */}
+        {/* Forgot password text */}
         <Box mt={2}>
           <Typography
             variant="body2"
@@ -109,10 +117,9 @@ const LoginPage = () => {
           </Typography>
         </Box>
 
-        {/* Divider */}
         <Divider sx={{ my: 3 }} />
 
-        {/* Sign up section */}
+        {/* Sign up link */}
         <Box>
           <Typography variant="body2" sx={{ fontSize: 13 }}>
             Don’t have an account?{" "}

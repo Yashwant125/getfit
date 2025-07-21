@@ -13,9 +13,9 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    // Optional: Add more fields like role, name, email, etc.
+    
   },
   { timestamps: true }
 );
 
-module.exports = mongoose.model('User', userSchema);
+module.exports = mongoose.model('User', userSchema); 

@@ -3,6 +3,7 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 const path = require("path");
 const connectDB = require("./config/db");
+const invoiceRoutes = require('./routes/invoiceRoutes');
 
 dotenv.config();
 
@@ -18,6 +19,7 @@ app.use("/api/plans", require("./routes/planRoutes"));
 app.use("/api/profile", require("./routes/profileRoutes"));
 app.use("/api/attendance", require("./routes/attendanceRoutes"));
 app.use("/api/auth", require("./routes/authRoutes")); // 👈 Auth
+app.use('/api/invoice', invoiceRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () =>
