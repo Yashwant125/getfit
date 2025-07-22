@@ -21,7 +21,7 @@ function AttendanceList() {
 
   const fetchData = async () => {
     try {
-      const res = await axios.get("http://192.168.29.227:5000/api/attendance");
+      const res = await axios.get("https://getfit-v9g1.onrender.com/api/attendance");
       const grouped = res.data.reduce((acc, record) => {
         let date;
         if (typeof record.date === "string" && record.date.includes("T")) {
@@ -51,7 +51,7 @@ function AttendanceList() {
 
   const handleDelete = async (id, date) => {
     try {
-      await axios.delete(`http://192.168.29.227:5000/api/attendance/${id}`);
+      await axios.delete(`https://getfit-v9g1.onrender.com/api/attendance/${id}`);
       const updated = { ...groupedRecords };
       updated[date] = updated[date].filter((rec) => rec._id !== id);
       if (updated[date].length === 0) delete updated[date];
