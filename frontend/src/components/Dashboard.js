@@ -140,10 +140,10 @@ const Dashboard = () => {
     (async () => {
       try {
         const [allRes, activeRes, unpaidRes, expiredRes] = await Promise.all([
-          axios.get("/api/members"),
-          axios.get("/api/members/active"),
-          axios.get("/api/members/unpaid"),
-          axios.get("/api/members/expired"),
+          axios.get("https://getfit-v9g1.onrender.com/api/members"),
+          axios.get("https://getfit-v9g1.onrender.com/api/members/active"),
+          axios.get("https://getfit-v9g1.onrender.com/api/members/unpaid"),
+          axios.get("https://getfit-v9g1.onrender.com/api/members/expired"),
         ]);
 
         const all = allRes.data;
