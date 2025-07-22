@@ -71,14 +71,21 @@ const ExpiredMembers = () => {
   };
 
   return (
-    <Box p={3}>
-      <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
+    <Box p={{ xs: 2, sm: 3 }}>
+      <Box
+        display="flex"
+        flexDirection={{ xs: "column", sm: "row" }}
+        justifyContent="space-between"
+        alignItems={{ xs: "flex-start", sm: "center" }}
+        gap={2}
+        mb={2}
+      >
         <Typography variant="h5">⌛ Expired Members</Typography>
         <Button
           variant="contained"
           color="primary"
           size="small"
-          sx={{ textTransform: "capitalize" }}
+          sx={{ textTransform: "capitalize", whiteSpace: "nowrap" }}
           onClick={handleDownloadPDF}
         >
           📄 Download PDF
@@ -95,16 +102,20 @@ const ExpiredMembers = () => {
         expiredMembers.map((member) => (
           <Card key={member._id} sx={{ mb: 2 }}>
             <CardContent>
-              <Typography variant="h6">{member.name}</Typography>
-              <Typography variant="body2">
+              <Typography variant="h6" fontSize={{ xs: 16, sm: 18 }}>
+                {member.name}
+              </Typography>
+              <Typography variant="body2" fontSize={{ xs: 13, sm: 14 }}>
                 Reg#: {member.registrationNumber} | Phone: {member.phone}
               </Typography>
-              <Typography variant="body2">Membership: {member.membershipType}</Typography>
-              <Typography variant="body2">
+              <Typography variant="body2" fontSize={{ xs: 13, sm: 14 }}>
+                Membership: {member.membershipType}
+              </Typography>
+              <Typography variant="body2" fontSize={{ xs: 13, sm: 14 }}>
                 Status: <strong>{member.status}</strong>
               </Typography>
               <Divider sx={{ my: 1 }} />
-              <Typography variant="body2">
+              <Typography variant="body2" fontSize={{ xs: 13, sm: 14 }}>
                 Start: {new Date(member.startDate).toLocaleDateString()} | End:{" "}
                 {new Date(member.endDate).toLocaleDateString()}
               </Typography>

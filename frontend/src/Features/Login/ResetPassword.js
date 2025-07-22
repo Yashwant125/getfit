@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import {
   Container,
-  Paper,
   Typography,
   TextField,
   Button,
   Box,
   CircularProgress,
+  
 } from '@mui/material';
 import axios from 'axios';
 
@@ -38,13 +38,26 @@ const ResetPassword = () => {
   };
 
   return (
-    <Container maxWidth="sm">
-      <Paper elevation={3} sx={{ padding: 4, mt: 8 }}>
-        <Typography variant="h5" align="center" fontWeight="bold" gutterBottom>
+    <Container maxWidth="xs">
+      <Box
+        sx={{
+          mt: 8,
+          p: 3,
+          borderRadius: 2,
+          boxShadow: 3,
+          bgcolor: 'background.paper',
+        }}
+      >
+        <Typography
+          variant="h5"
+          align="center"
+          fontWeight="bold"
+          gutterBottom
+        >
           Reset Password
         </Typography>
 
-        <Box>
+        <Box component="form" noValidate autoComplete="off">
           <TextField
             fullWidth
             label="Phone Number"
@@ -65,14 +78,19 @@ const ResetPassword = () => {
           <Button
             fullWidth
             variant="contained"
+            color="primary"
             onClick={handleReset}
             sx={{ mt: 2 }}
             disabled={loading}
           >
-            {loading ? <CircularProgress size={24} color="inherit" /> : 'Reset Password'}
+            {loading ? (
+              <CircularProgress size={24} color="inherit" />
+            ) : (
+              'Reset Password'
+            )}
           </Button>
         </Box>
-      </Paper>
+      </Box>
     </Container>
   );
 };

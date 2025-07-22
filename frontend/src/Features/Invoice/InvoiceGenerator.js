@@ -15,10 +15,10 @@ const InvoiceGenerator = () => {
     validFrom: "",
     validUpto: "",
     paidDate: "",
-    type: "", // Monthly, Quarterly etc.
+    type: "",
     total: "",
     signature: "",
-    membershipType: "", // new or renewal
+    membershipType: "",
   });
 
   const handleChange = (field, value) => {
@@ -44,7 +44,6 @@ const InvoiceGenerator = () => {
   return (
     <div style={styles.wrapper}>
       <div ref={invoiceRef} style={styles.invoiceContainer}>
-        {/* Header */}
         <div style={styles.header}>
           <img src="/images/goldenpic.jpg" alt="Gym Logo" style={styles.logo} />
           <div style={styles.headerText}>
@@ -55,29 +54,27 @@ const InvoiceGenerator = () => {
 
         <hr style={styles.separator} />
 
-        {/* Invoice Meta */}
-        <div style={styles.metaRow}>
-          <div>
-            <strong>Admission No:</strong>{" "}
+        <div style={{ ...styles.flexWrap, marginBottom: "15px" }}>
+          <div style={styles.flexItem}>
+            <strong>Admission No:</strong>
             {isEditMode ? (
               <input value={invoiceData.admissionNo} onChange={(e) => handleChange("admissionNo", e.target.value)} />
             ) : (
               invoiceData.admissionNo
             )}
           </div>
-          <div>
-            <strong>Date:</strong>{" "}
+          <div style={styles.flexItem}>
+            <strong>Date:</strong>
             {isEditMode ? (
               <input type="date" value={invoiceData.date} onChange={(e) => handleChange("date", e.target.value)} />
             ) : (
               invoiceData.date
             )}
           </div>
-          <div>
-            <strong>Payment Mode:</strong>{" "}
+          <div style={styles.flexItem}>
+            <strong>Payment Mode:</strong>
             {isEditMode ? (
               <select value={invoiceData.paymentMode} onChange={(e) => handleChange("paymentMode", e.target.value)}>
-                
                 <option value="Cash">Cash</option>
                 <option value="Online">Online</option>
               </select>
@@ -87,8 +84,7 @@ const InvoiceGenerator = () => {
           </div>
         </div>
 
-        {/* Membership Type */}
-        <div style={styles.checkboxRow}>
+        <div style={{ ...styles.flexWrap, gap: "20px", marginBottom: "15px" }}>
           <label>
             <input
               type="radio"
@@ -111,23 +107,16 @@ const InvoiceGenerator = () => {
           </label>
         </div>
 
-        {/* Editable Fields */}
-        <div style={styles.formGroup}>
-          {[
-            ["receivedFrom", "Received from"],
-            ["sumOfRupees", "A sum of rupees"],
-            ["validFrom", "Valid from"],
-            ["validUpto", "Valid upto"],
-            ["paidDate", "Paid date"],
-          ].map(([field, label], index) => (
+        <div>
+          {["receivedFrom", "sumOfRupees", "validFrom", "validUpto", "paidDate"].map((field, index) => (
             <div key={index} style={styles.formRow}>
-              <div style={styles.formLabel}>{label}:</div>
+              <div style={styles.formLabel}>{field.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}:</div>
               {isEditMode ? (
                 <input
                   type={["validFrom", "validUpto", "paidDate"].includes(field) ? "date" : "text"}
                   value={invoiceData[field]}
                   onChange={(e) => handleChange(field, e.target.value)}
-                  style={{ flex: 1, border: "none", borderBottom: "1px solid #222", height: "25px" }}
+                  style={styles.inputLine}
                 />
               ) : (
                 <div>{invoiceData[field]}</div>
@@ -136,7 +125,6 @@ const InvoiceGenerator = () => {
           ))}
         </div>
 
-        {/* Fees Table */}
         <table style={styles.table}>
           <thead>
             <tr>
@@ -172,7 +160,7 @@ const InvoiceGenerator = () => {
                     type="text"
                     value={invoiceData.total}
                     onChange={(e) => handleChange("total", e.target.value)}
-                    style={{ border: "none", borderBottom: "1px solid #222" }}
+                    style={styles.inputLine}
                   />
                 ) : (
                   invoiceData.total
@@ -182,9 +170,13 @@ const InvoiceGenerator = () => {
           </tbody>
         </table>
 
-        {/* Notes and Signature */}
-        <div style={styles.noteSignWrapper}>
-          <div style={styles.notes}>
+        <hr style={{ margin: "10px 0", border: "none", borderTop: "1px solid #ccc" }} />
+
+
+
+        {/* Note and Signature - moved just below the table without space */}
+        <div style={{ ...styles.flexWrap, marginTop: "0px", gap: "20px" }}>
+          <div style={{ flex: 1 }}>
             <strong>Note:</strong>
             <ul style={styles.noteList}>
               <li>Management will not be responsible for any loss.</li>
@@ -193,7 +185,7 @@ const InvoiceGenerator = () => {
               <li>Please take receipt when you pay the fees.</li>
             </ul>
           </div>
-          <div style={styles.signature}>
+          <div style={{ flex: 1 }}>
             Signature:
             <div style={{ marginTop: "8px" }}>
               {isEditMode ? (
@@ -201,7 +193,7 @@ const InvoiceGenerator = () => {
                   type="text"
                   value={invoiceData.signature}
                   onChange={(e) => handleChange("signature", e.target.value)}
-                  style={{ border: "none", borderBottom: "1px solid #000", width: "100%" }}
+                  style={styles.inputLine}
                 />
               ) : (
                 <div style={{ borderBottom: "1px solid #000" }}>{invoiceData.signature}</div>
@@ -211,12 +203,13 @@ const InvoiceGenerator = () => {
         </div>
       </div>
 
-      {/* Buttons */}
-      <div>
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "12px", marginTop: "24px" }}>
         <button onClick={() => setIsEditMode(!isEditMode)} style={styles.editButton}>
           {isEditMode ? "Save" : "Edit"}
         </button>
-        <button onClick={downloadPDF} style={styles.downloadButton}>Download PDF</button>
+        <button onClick={downloadPDF} style={styles.downloadButton}>
+          Download PDF
+        </button>
       </div>
     </div>
   );
@@ -225,118 +218,113 @@ const InvoiceGenerator = () => {
 const styles = {
   wrapper: {
     fontFamily: "'Poppins', sans-serif",
-    backgroundColor: "#f2f2f2",
-    padding: "20px",
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
+    padding: "8px",
+    background: "#f5f5f5",
+    minHeight: "100vh",
+    boxSizing: "border-box",
   },
   invoiceContainer: {
-    width: "210mm",
-    minHeight: "297mm",
-    background: "#fff",
-    padding: "25px",
-    borderRadius: "10px",
-    boxShadow: "0 0 10px rgba(0,0,0,0.2)",
-    color: "#000",
+    width: "100%",
+    backgroundColor: "#fff",
+    padding: "16px",
+    borderRadius: "8px",
+    boxShadow: "0 2px 8px rgba(0, 0, 0, 0.05)",
+    boxSizing: "border-box",
   },
   header: {
     textAlign: "center",
-    marginBottom: "0px",
+    marginBottom: "16px",
   },
   logo: {
-    width: "180px",
-    marginBottom: "4px",
+    width: "100px",
+    height: "auto",
+    marginBottom: "8px",
   },
   headerText: {
-    fontSize: "14px",
+    fontSize: "13px",
+    color: "#444",
     lineHeight: "1.4",
   },
   separator: {
-    border: "none",
-    borderTop: "2px solid #222",
-    margin: "10px 0 20px",
+    borderTop: "2px solid #000",
+    margin: "16px 0",
   },
-  metaRow: {
-    fontSize: "14px",
+  flexWrap: {
     display: "flex",
-    flexDirection: "column",
-    gap: "5px",
-    marginBottom: "15px",
+    flexWrap: "wrap",
+    gap: "12px",
   },
-  checkboxRow: {
-    display: "flex",
-    gap: "40px",
+  flexItem: {
+    flex: "1 1 100%",
+    minWidth: "200px",
     fontSize: "14px",
-    marginBottom: "20px",
-  },
-  formGroup: {
-    marginBottom: "20px",
   },
   formRow: {
     display: "flex",
+    flexWrap: "wrap",
     alignItems: "center",
-    marginBottom: "10px",
+    marginBottom: "12px",
   },
   formLabel: {
-    width: "35%",
-    fontWeight: "500",
-  },
-  table: {
-    width: "100%",
-    borderCollapse: "collapse",
-    marginTop: "20px",
-  },
-  tableHead: {
-    background: "#e6e6e6",
-    padding: "10px",
-    border: "1px solid #ccc",
+    flex: "0 0 140px",
+    fontWeight: "600",
     fontSize: "14px",
+    color: "#333",
   },
-  tableCell: {
-    padding: "10px",
+  inputLine: {
+    flex: 1,
+    border: "none",
+    borderBottom: "1px solid #444",
+    padding: "6px",
+    fontSize: "14px",
+    background: "transparent",
+    outline: "none",
+    minWidth: "160px",
+  },
+ table: {
+  transform: "scale(0.8)",
+  transformOrigin: "top left",
+  minHeight: "400px", // or any height you need
+},
+
+  tableHead: {
+    backgroundColor: "#f0f0f0",
+    padding: "8px",
     border: "1px solid #ccc",
-    fontSize: "13px",
     textAlign: "center",
   },
-  noteSignWrapper: {
-    display: "flex",
-    justifyContent: "space-between",
-    marginTop: "30px",
-  },
-  notes: {
-    width: "60%",
-    fontSize: "13px",
+  tableCell: {
+    padding: "8px",
+    border: "1px solid #ccc",
+    textAlign: "center",
   },
   noteList: {
-    paddingLeft: "20px",
-    marginTop: "8px",
-  },
-  signature: {
-    width: "30%",
     fontSize: "13px",
-    textAlign: "right",
-  },
-  downloadButton: {
-    marginTop: "20px",
-    padding: "10px 25px",
-    fontSize: "15px",
-    backgroundColor: "#007bff",
-    color: "#fff",
-    border: "none",
-    borderRadius: "6px",
-    cursor: "pointer",
-    marginLeft: "10px",
+    paddingLeft: "16px",
+    marginTop: "4px", // tightened spacing
+    color: "#444",
   },
   editButton: {
-    marginTop: "20px",
-    padding: "10px 25px",
-    fontSize: "15px",
+    padding: "10px 20px",
+    fontSize: "14px",
     backgroundColor: "#28a745",
     color: "#fff",
     border: "none",
-    borderRadius: "6px",
+    borderRadius: "5px",
     cursor: "pointer",
+    width: "100%",
+    maxWidth: "240px",
+  },
+  downloadButton: {
+    padding: "10px 20px",
+    fontSize: "14px",
+    backgroundColor: "#007bff",
+    color: "#fff",
+    border: "none",
+    borderRadius: "5px",
+    cursor: "pointer",
+    width: "100%",
+    maxWidth: "240px",
   },
 };
 

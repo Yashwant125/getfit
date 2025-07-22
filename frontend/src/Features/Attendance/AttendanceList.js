@@ -100,15 +100,17 @@ function AttendanceList() {
   };
 
   return (
-    <Box p={3}>
+    <Box p={{ xs: 1, sm: 3 }}>
       <Box
         display="flex"
+        flexDirection={{ xs: "column", sm: "row" }}
         justifyContent="space-between"
-        alignItems="center"
+        alignItems={{ xs: "flex-start", sm: "center" }}
+        gap={2}
         mb={3}
       >
         <Typography
-          variant="h5"
+          variant="h6"
           fontWeight="bold"
         >
           📋 Attendance List
@@ -125,66 +127,58 @@ function AttendanceList() {
       </Box>
 
       {Object.entries(groupedRecords).map(([date, records], index) => (
-        <Paper elevation={3} key={index} sx={{ mb: 4, p: 2 }}>
+        <Paper elevation={3} key={index} sx={{ mb: 4, p: { xs: 1.5, sm: 2 } }}>
           <Typography
-            variant="h6"
+            variant="subtitle1"
             gutterBottom
             sx={{ fontWeight: 600, color: "#444" }}
           >
             📅 {date}
           </Typography>
-          <Table size="small">
-            <TableHead>
-              <TableRow sx={{ backgroundColor: "#f5f5f5" }}>
-                <TableCell>
-                  <strong>Reg No</strong>
-                </TableCell>
-                <TableCell>
-                  <strong>Name</strong>
-                </TableCell>
-                <TableCell>
-                  <strong>Phone</strong>
-                </TableCell>
-                <TableCell>
-                  <strong>Expiry Date</strong>
-                </TableCell>
-                <TableCell align="center">
-                  <strong>Action</strong>
-                </TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {records.map((record, idx) => {
-                const m = record.memberId || {};
-                return (
-                  <TableRow
-                    key={record._id}
-                    sx={{
-                      backgroundColor: idx % 2 === 0 ? "#fafafa" : "#fff",
-                      "&:hover": { backgroundColor: "#f0f0f0" },
-                    }}
-                  >
-                    <TableCell>{m.registrationNumber || "N/A"}</TableCell>
-                    <TableCell>{m.name || "N/A"}</TableCell>
-                    <TableCell>{m.phone || "N/A"}</TableCell>
-                    <TableCell>
-                      {m.endDate
-                        ? new Date(m.endDate).toLocaleDateString()
-                        : "N/A"}
-                    </TableCell>
-                    <TableCell align="center">
-                      <IconButton
-                        color="error"
-                        onClick={() => handleDelete(record._id, date)}
-                      >
-                        <DeleteIcon />
-                      </IconButton>
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
-            </TableBody>
-          </Table>
+          <Box sx={{ overflowX: "auto" }}>
+            <Table size="small">
+              <TableHead>
+                <TableRow sx={{ backgroundColor: "#f5f5f5" }}>
+                  <TableCell><strong>Reg No</strong></TableCell>
+                  <TableCell><strong>Name</strong></TableCell>
+                  <TableCell><strong>Phone</strong></TableCell>
+                  <TableCell><strong>Expiry Date</strong></TableCell>
+                  <TableCell align="center"><strong>Action</strong></TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {records.map((record, idx) => {
+                  const m = record.memberId || {};
+                  return (
+                    <TableRow
+                      key={record._id}
+                      sx={{
+                        backgroundColor: idx % 2 === 0 ? "#fafafa" : "#fff",
+                        "&:hover": { backgroundColor: "#f0f0f0" },
+                      }}
+                    >
+                      <TableCell>{m.registrationNumber || "N/A"}</TableCell>
+                      <TableCell>{m.name || "N/A"}</TableCell>
+                      <TableCell>{m.phone || "N/A"}</TableCell>
+                      <TableCell>
+                        {m.endDate
+                          ? new Date(m.endDate).toLocaleDateString()
+                          : "N/A"}
+                      </TableCell>
+                      <TableCell align="center">
+                        <IconButton
+                          color="error"
+                          onClick={() => handleDelete(record._id, date)}
+                        >
+                          <DeleteIcon />
+                        </IconButton>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
+          </Box>
         </Paper>
       ))}
     </Box>

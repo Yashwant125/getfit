@@ -14,7 +14,7 @@ const addPlan = async (req, res) => {
 };
 
 // Get all membership plans
-const getPlans = async (req, res) => {
+const getPlans = async (_req, res) => {
   try {
     const plans = await Plan.find().sort({ createdAt: -1 });
     res.status(200).json(plans);

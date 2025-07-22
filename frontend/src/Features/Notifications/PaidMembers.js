@@ -71,14 +71,27 @@ const PaidMembers = () => {
   };
 
   return (
-    <Box p={3}>
-      <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
-        <Typography variant="h5">✅ Paid Members</Typography>
+    <Box p={2} sx={{ maxWidth: "100%", mx: "auto" }}>
+      <Box
+        display="flex"
+        flexDirection={{ xs: "column", sm: "row" }}
+        justifyContent="space-between"
+        alignItems={{ xs: "stretch", sm: "center" }}
+        gap={2}
+        mb={2}
+      >
+        <Typography variant="h5" sx={{ fontSize: { xs: "1.2rem", sm: "1.5rem" } }}>
+          ✅ Paid Members
+        </Typography>
         <Button
           variant="contained"
           color="primary"
-          size="small" // <-- Reduced size
-          sx={{ textTransform: "capitalize" }}
+          size="small"
+          sx={{
+            textTransform: "capitalize",
+            alignSelf: { xs: "flex-start", sm: "center" },
+            whiteSpace: "nowrap",
+          }}
           onClick={handleDownloadPDF}
         >
           📄 Download PDF
@@ -94,8 +107,10 @@ const PaidMembers = () => {
       ) : (
         activeMembers.map((member) => (
           <Card key={member._id} sx={{ mb: 2 }}>
-            <CardContent>
-              <Typography variant="h6">{member.name}</Typography>
+            <CardContent sx={{ px: 2 }}>
+              <Typography variant="h6" sx={{ fontSize: { xs: "1rem", sm: "1.25rem" } }}>
+                {member.name}
+              </Typography>
               <Typography variant="body2">
                 Reg#: {member.registrationNumber} | Phone: {member.phone}
               </Typography>

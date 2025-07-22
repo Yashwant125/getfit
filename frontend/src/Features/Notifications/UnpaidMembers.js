@@ -71,15 +71,22 @@ const UnpaidMembers = () => {
   };
 
   return (
-    <Box p={3}>
-      <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
-        <Typography variant="h6">🧾 Unpaid & Partially Paid Members</Typography>
+    <Box p={{ xs: 2, sm: 3 }} maxWidth="600px" mx="auto">
+      <Box
+        display="flex"
+        flexDirection={{ xs: "column", sm: "row" }}
+        justifyContent="space-between"
+        alignItems={{ xs: "flex-start", sm: "center" }}
+        mb={2}
+        gap={1}
+      >
+        <Typography variant="h6">🧾 Unpaid Members</Typography>
         <Button
           variant="contained"
           color="primary"
           size="small"
           onClick={handleDownloadPDF}
-          sx={{ textTransform: "none", px: 2, py: 0.5 }}
+          sx={{ textTransform: "none", px: 2, py: 0.5, whiteSpace: "nowrap" }}
         >
           📄 Download PDF
         </Button>
@@ -95,16 +102,20 @@ const UnpaidMembers = () => {
         unpaidMembers.map((member) => (
           <Card key={member._id} sx={{ mb: 2 }}>
             <CardContent>
-              <Typography variant="h6">{member.name}</Typography>
-              <Typography variant="body2">
+              <Typography variant="h6" fontSize={{ xs: "1rem", sm: "1.2rem" }}>
+                {member.name}
+              </Typography>
+              <Typography variant="body2" fontSize={{ xs: "0.85rem" }}>
                 Reg#: {member.registrationNumber} | Phone: {member.phone}
               </Typography>
-              <Typography variant="body2">Membership: {member.membershipType}</Typography>
-              <Typography variant="body2">
+              <Typography variant="body2" fontSize={{ xs: "0.85rem" }}>
+                Membership: {member.membershipType}
+              </Typography>
+              <Typography variant="body2" fontSize={{ xs: "0.85rem" }}>
                 Status: <strong>{member.status}</strong>
               </Typography>
               <Divider sx={{ my: 1 }} />
-              <Typography variant="body2">
+              <Typography variant="body2" fontSize={{ xs: "0.85rem" }}>
                 Start: {new Date(member.startDate).toLocaleDateString()} | End:{" "}
                 {new Date(member.endDate).toLocaleDateString()}
               </Typography>

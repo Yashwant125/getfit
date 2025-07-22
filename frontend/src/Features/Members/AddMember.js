@@ -170,25 +170,7 @@ const AddMember = ({ setMembers }) => {
             />
           </Grid>
 
-          <Grid item xs={6}>
-            <FormControl fullWidth required>
-              <Select
-                name="status"
-                value={formData.status}
-                onChange={handleChange}
-                displayEmpty
-                variant="outlined"
-                renderValue={(selected) => selected || "Select Status"}
-              >
-                {statusOptions.map((option) => (
-                  <MenuItem key={option.value} value={option.value}>
-                    {option.value}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </Grid>
-
+          {/* Membership Type First */}
           <Grid item xs={6}>
             <FormControl fullWidth required>
               <Select
@@ -202,6 +184,30 @@ const AddMember = ({ setMembers }) => {
                 {membershipOptions.map((type) => (
                   <MenuItem key={type} value={type}>
                     {type}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Grid>
+
+          {/* Status Second */}
+          <Grid item xs={6}>
+            <FormControl fullWidth required>
+              <Select
+                name="status"
+                value={formData.status}
+                onChange={handleChange}
+                displayEmpty
+                variant="outlined"
+                renderValue={(selected) => selected || "Select Status"}
+                 sx={{
+      height: 56,            // increase height
+      fontSize: "1rem",      // increase font size
+    }}
+              >
+                {statusOptions.map((option) => (
+                  <MenuItem key={option.value} value={option.value}>
+                    {option.value}
                   </MenuItem>
                 ))}
               </Select>

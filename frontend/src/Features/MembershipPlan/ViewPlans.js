@@ -5,6 +5,7 @@ import {
   Grid,
   IconButton,
   Button,
+  Box,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import axios from "axios";
@@ -26,7 +27,7 @@ const ViewPlans = ({ plans, fetchPlans }) => {
     doc.setFontSize(18);
     doc.text("GetFit - Membership Plans", 14, 20);
 
-    const headers = [["#", "Type", "Duration", "Amount "]];
+    const headers = [["#", "Type", "Duration", "Amount"]];
     const data = plans.map((plan, index) => [
       index + 1,
       plan.membershipType || "N/A",
@@ -49,37 +50,40 @@ const ViewPlans = ({ plans, fetchPlans }) => {
     <Paper
       elevation={3}
       sx={{
-        p: 4,
+        p: 3,
         width: "100%",
         maxWidth: "700px",
         mx: "auto",
         mt: 5,
       }}
     >
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          marginBottom: "20px",
-        }}
+      <Box
+        display="flex"
+        justifyContent="space-between"
+        alignItems="center"
+        flexWrap="wrap"
+        mb={2}
       >
-        <Typography variant="h6">All Membership Plans</Typography>
+        <Typography variant="h6" fontSize={{ xs: "1rem", sm: "1.25rem" }}>
+          All Membership Plans
+        </Typography>
         <Button
           variant="contained"
           color="primary"
           size="small"
           onClick={downloadPDF}
           sx={{
-            fontSize: "0.75rem",
-            padding: "4px 8px",
-            minWidth: "unset",
+            fontSize: "0.7rem",
+            px: 1.5,
+            py: 0.5,
+            mt: { xs: 1, sm: 0 },
             textTransform: "none",
+            whiteSpace: "nowrap",
           }}
         >
           📄 Download PDF
         </Button>
-      </div>
+      </Box>
 
       {plans.length === 0 ? (
         <Typography>No plans available.</Typography>
@@ -111,14 +115,20 @@ const ViewPlans = ({ plans, fetchPlans }) => {
             </IconButton>
 
             <Grid container spacing={1}>
-              <Grid item xs={12} sm={6}>
-                <strong>Type:</strong> {plan.membershipType}
+              <Grid item xs={12}>
+                <Typography variant="body2">
+                  <strong>Type:</strong> {plan.membershipType}
+                </Typography>
               </Grid>
-              <Grid item xs={12} sm={6}>
-                <strong>Duration:</strong> {plan.duration}
+              <Grid item xs={6} sm={6}>
+                <Typography variant="body2">
+                  <strong>Duration:</strong> {plan.duration}
+                </Typography>
               </Grid>
-              <Grid item xs={12} sm={6}>
-                <strong>Amount:</strong> {plan.amount}
+              <Grid item xs={6} sm={6}>
+                <Typography variant="body2">
+                  <strong>Amount:</strong> ₹{plan.amount}
+                </Typography>
               </Grid>
             </Grid>
           </Paper>

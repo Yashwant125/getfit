@@ -7,12 +7,17 @@ import {
   Typography,
   Stack,
   Box,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
 
 const AddPlan = ({ setPlans }) => {
   const [membershipType, setMembershipType] = useState("");
   const [duration, setDuration] = useState("");
   const [amount, setAmount] = useState("");
+
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   // Auto-fill logic
   useEffect(() => {
@@ -59,8 +64,16 @@ const AddPlan = ({ setPlans }) => {
   };
 
   return (
-    <Box mt={10}>
-      <Paper elevation={3} style={{ padding: 20, maxWidth: 400, margin: "auto" }}>
+    <Box mt={10} px={isMobile ? 2 : 0}>
+      <Paper
+        elevation={3}
+        style={{
+          padding: 20,
+          maxWidth: 400,
+          margin: "auto",
+          width: "100%",
+        }}
+      >
         <Typography variant="h6" gutterBottom>
           Create Membership Plan
         </Typography>

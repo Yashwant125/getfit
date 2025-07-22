@@ -9,10 +9,11 @@ import {
   Accordion,
   AccordionSummary,
   AccordionDetails,
-  Avatar,
+ 
   Box,
   Button,
   IconButton,
+  useMediaQuery,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import EditIcon from "@mui/icons-material/Edit";
@@ -29,14 +30,10 @@ const Profile = () => {
     sessionTimings: { morning: "", evening: "" },
   });
 
-  const [trainers, setTrainers] = useState({
-    morning: [],
-    evening: [],
-  });
-
+  const [trainers, setTrainers] = useState({ morning: [], evening: [] });
   const [isEditing, setIsEditing] = useState(false);
+  const isMobile = useMediaQuery("(max-width:600px)");
 
-  // Fetch profile data on component mount
   useEffect(() => {
     axios
       .get("http://localhost:5000/api/profile")
@@ -96,19 +93,24 @@ const Profile = () => {
   return (
     <Card
       sx={{
-        maxWidth: 900,
+        maxWidth: 960,
         margin: "auto",
         mt: 4,
-        p: 3,
-        boxShadow: 4,
-        borderRadius: 4,
-        backgroundColor: "#f9f9f9",
+        p: isMobile ? 2 : 4,
+        boxShadow: 3,
+        borderRadius: 3,
+        backgroundColor: "#f5f5f5",
       }}
     >
       <CardContent>
-        <Typography variant="h5" gutterBottom>
-          Gym Profile
-        </Typography>
+       <Typography
+  variant="h5"
+  textAlign="center"
+  sx={{ mb: 4, mt: -2 }} // adds space below and pulls it upward
+>
+  Gym Profile
+</Typography>
+
 
         <Grid container spacing={2} sx={{ mb: 3 }}>
           <Grid item xs={12} sm={6}>
@@ -144,41 +146,45 @@ const Profile = () => {
               sx={{ backgroundColor: "#fff" }}
             />
           </Grid>
-          <Grid item xs={12}>
-            <Box display="flex" gap={2}>
-              <TextField
-                label="Morning Timing"
-                value={gymInfo.sessionTimings.morning}
-                onChange={(e) =>
-                  setGymInfo({
-                    ...gymInfo,
-                    sessionTimings: {
-                      ...gymInfo.sessionTimings,
-                      morning: e.target.value,
-                    },
-                  })
-                }
-                fullWidth
-                InputProps={{ readOnly: !isEditing }}
-                sx={{ backgroundColor: "#fff" }}
-              />
-              <TextField
-                label="Evening Timing"
-                value={gymInfo.sessionTimings.evening}
-                onChange={(e) =>
-                  setGymInfo({
-                    ...gymInfo,
-                    sessionTimings: {
-                      ...gymInfo.sessionTimings,
-                      evening: e.target.value,
-                    },
-                  })
-                }
-                fullWidth
-                InputProps={{ readOnly: !isEditing }}
-                sx={{ backgroundColor: "#fff" }}
-              />
-            </Box>
+          <Grid item xs={12} sm={6}>
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  label="Morning Timing"
+                  value={gymInfo.sessionTimings.morning}
+                  onChange={(e) =>
+                    setGymInfo({
+                      ...gymInfo,
+                      sessionTimings: {
+                        ...gymInfo.sessionTimings,
+                        morning: e.target.value,
+                      },
+                    })
+                  }
+                  fullWidth
+                  InputProps={{ readOnly: !isEditing }}
+                  sx={{ backgroundColor: "#fff" }}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  label="Evening Timing"
+                  value={gymInfo.sessionTimings.evening}
+                  onChange={(e) =>
+                    setGymInfo({
+                      ...gymInfo,
+                      sessionTimings: {
+                        ...gymInfo.sessionTimings,
+                        evening: e.target.value,
+                      },
+                    })
+                  }
+                  fullWidth
+                  InputProps={{ readOnly: !isEditing }}
+                  sx={{ backgroundColor: "#fff" }}
+                />
+              </Grid>
+            </Grid>
           </Grid>
         </Grid>
 
@@ -203,9 +209,6 @@ const Profile = () => {
         </Box>
 
         <Divider sx={{ my: 2 }} />
-        <Typography variant="h6" gutterBottom>
-          Trainers
-        </Typography>
 
         {["morning", "evening"].map((session) => (
           <Accordion key={session} defaultExpanded>
@@ -219,11 +222,12 @@ const Profile = () => {
                 <Box
                   key={index}
                   display="flex"
-                  alignItems="center"
+                  flexDirection={isMobile ? "column" : "row"}
+                  alignItems={isMobile ? "stretch" : "center"}
                   gap={2}
                   mb={2}
                 >
-                  <Avatar />
+                 
                   <TextField
                     label="Trainer Name"
                     value={trainer.name}
