@@ -36,7 +36,7 @@ const Profile = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/api/profile")
+      .get("https://getfit-v9g1.onrender.com/api/profile")
       .then((res) => {
         const data = res.data;
         if (data) {
@@ -60,7 +60,7 @@ const Profile = () => {
     const profileData = { ...gymInfo, trainers };
 
     axios
-      .post("http://localhost:5000/api/profile", profileData)
+      .post("https://getfit-v9g1.onrender.com/api/profile", profileData)
       .then((res) => {
         console.log("Saved profile:", res.data);
         setIsEditing(false);
