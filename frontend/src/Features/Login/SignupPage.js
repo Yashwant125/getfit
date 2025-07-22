@@ -39,7 +39,7 @@ const SignupPage = () => {
     }
 
     try {
-      await axios.post('http://localhost:5000/api/auth/signup', {
+      await axios.post('https://getfit-v9g1.onrender.com/api/auth/signup', {
         phone,
         password,
       });
