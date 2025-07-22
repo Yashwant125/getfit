@@ -219,7 +219,7 @@ const Dashboard = () => {
       </Box>
 
       <DataSection
-        title="Recent Member Registrations"
+        title="Recent Registrations"
         data={recent}
         emptyText="No recent registrations."
         icon={<PersonIcon />}
@@ -235,7 +235,7 @@ const Dashboard = () => {
       />
 
       <DataSection
-        title="Unpaid / Partially Paid Members"
+        title="Unpaid Members"
         data={unpaidList}
         emptyText="No unpaid members."
         icon={<WarningIcon />}
