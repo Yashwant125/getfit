@@ -10,7 +10,7 @@ function ScanAttendance() {
     if (!identifier) return;
 
     try {
-      const res = await axios.post("/api/attendance/mark", { identifier });
+      const res = await axios.post("https://getfit-v9g1.onrender.com/api/attendance/mark", { identifier });
       setMessage(res.data.message || "Marked present!");
       setIdentifier("");
     } catch (err) {
