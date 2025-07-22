@@ -12,7 +12,7 @@ const ViewMembers = ({ members, setMembers }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/members");
+        const res = await axios.get("https://getfit-v9g1.onrender.com/api/members");
         setMembers(res.data);
       } catch (error) {
         console.error("Error fetching members:", error);
@@ -53,7 +53,7 @@ const ViewMembers = ({ members, setMembers }) => {
       };
 
       const res = await axios.put(
-        `http://localhost:5000/api/members/${updatedMember._id}`,
+        `https://getfit-v9g1.onrender.com/api/members/${updatedMember._id}`,
         updatedMember
       );
 
@@ -76,7 +76,7 @@ const ViewMembers = ({ members, setMembers }) => {
     if (!confirm) return;
 
     try {
-      await axios.delete(`http://localhost:5000/api/members/${id}`);
+      await axios.delete(`https://getfit-v9g1.onrender.com/api/members/${id}`);
       setMembers((prev) => prev.filter((m) => m._id !== id));
     } catch (error) {
       console.error("Error deleting member:", error);
