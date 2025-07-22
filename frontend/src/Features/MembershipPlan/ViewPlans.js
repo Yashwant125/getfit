@@ -15,7 +15,7 @@ import "jspdf-autotable";
 const ViewPlans = ({ plans, fetchPlans }) => {
   const handleDelete = async (planId) => {
     try {
-      await axios.delete(`http://localhost:5000/api/plans/${planId}`);
+      await axios.delete(`https://getfit-v9g1.onrender.com/api/plans/${planId}`);
       fetchPlans(); // Refresh after deletion
     } catch (error) {
       console.error("Error deleting plan:", error.response?.data || error.message);
