@@ -151,7 +151,7 @@ const App = () => {
           <Route path="/about" element={<ProtectedRoute><About /></ProtectedRoute>} />
 
           {/* Attendance */}
-          <Route path="/scan-attendance" element={<ProtectedRoute><ScanAttendance /></ProtectedRoute>} />
+          <Route path="/scan-attendance" element={<ScanAttendance />} />
           <Route path="/qr-code" element={<ProtectedRoute><QRCodeDisplay /></ProtectedRoute>} />
           <Route path="/attendance-list" element={<ProtectedRoute><AttendanceList /></ProtectedRoute>} />
 
