@@ -8,11 +8,13 @@ const ViewMembers = ({ members, setMembers }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [editingMember, setEditingMember] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [sortBy, setSortBy] = useState("name");
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get("https://getfit-v9g1.onrender.com/api/members");
+        const res = await axios.get("http://localhost:5000/api/members");
         setMembers(res.data);
       } catch (error) {
         console.error("Error fetching members:", error);
@@ -53,7 +55,7 @@ const ViewMembers = ({ members, setMembers }) => {
       };
 
       const res = await axios.put(
-        `https://getfit-v9g1.onrender.com/api/members/${updatedMember._id}`,
+        `http://localhost:5000/api/members/${updatedMember._id}`,
         updatedMember
       );
 
@@ -70,13 +72,11 @@ const ViewMembers = ({ members, setMembers }) => {
   };
 
   const handleDelete = async (id) => {
-    const confirm = window.confirm(
-      "Are you sure you want to delete this member?"
-    );
+    const confirm = window.confirm("Are you sure you want to delete this member?");
     if (!confirm) return;
 
     try {
-      await axios.delete(`https://getfit-v9g1.onrender.com/api/members/${id}`);
+      await axios.delete(`http://localhost:5000/api/members/${id}`);
       setMembers((prev) => prev.filter((m) => m._id !== id));
     } catch (error) {
       console.error("Error deleting member:", error);
@@ -90,19 +90,9 @@ const ViewMembers = ({ members, setMembers }) => {
     doc.text("GetFit - Members Report", 14, 20);
 
     const headers = [
-      [
-        "#",
-        "Reg No",
-        "Name",
-        "Phone",
-        "Membership",
-        "From",
-        "To",
-        "Amount",
-        "Status",
-      ],
+      ["#", "Reg No", "Name", "Phone", "Membership", "From", "To", "Amount", "Status"],
     ];
-    const rows = members.map((member, index) => [
+    const rows = filteredMembers.map((member, index) => [
       index + 1,
       member.registrationNumber || "-",
       member.name || "-",
@@ -124,6 +114,20 @@ const ViewMembers = ({ members, setMembers }) => {
 
     doc.save("Members_Report.pdf");
   };
+
+  // Filter and Sort Members
+  const filteredMembers = members
+    .filter((member) => {
+      const term = searchTerm.toLowerCase();
+      return (
+        member.name?.toLowerCase().includes(term) ||
+        member.registrationNumber?.toLowerCase().includes(term)
+      );
+    })
+    .sort((a, b) => {
+      if (sortBy === "name") return a.name?.localeCompare(b.name);
+      return a.registrationNumber?.localeCompare(b.registrationNumber);
+    });
 
   if (loading) return <p>Loading members...</p>;
   if (error) return <p>{error}</p>;
@@ -156,10 +160,39 @@ const ViewMembers = ({ members, setMembers }) => {
         </button>
       </div>
 
-      {members.length === 0 ? (
+      {/* Search & Sort */}
+      <div style={{ display: "flex", gap: "10px", marginBottom: "20px" }}>
+        <input
+          type="text"
+          placeholder="Search by name or Reg No"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          style={{
+            flex: 1,
+            padding: "8px",
+            border: "1px solid #ccc",
+            borderRadius: "4px",
+          }}
+        />
+
+        <select
+          value={sortBy}
+          onChange={(e) => setSortBy(e.target.value)}
+          style={{
+            padding: "8px",
+            borderRadius: "4px",
+            border: "1px solid #ccc",
+          }}
+        >
+          <option value="name">Sort by Name</option>
+          <option value="registrationNumber">Sort by Reg No</option>
+        </select>
+      </div>
+
+      {filteredMembers.length === 0 ? (
         <p>No members found.</p>
       ) : (
-        members.map((member) => (
+        filteredMembers.map((member) => (
           <div
             key={member._id}
             style={{
@@ -332,7 +365,7 @@ const ViewMembers = ({ members, setMembers }) => {
                     backgroundColor: "#ffc107",
                     color: "#000",
                     marginRight: "10px",
-                    border: "none", // ⬅️ Remove outline
+                    border: "none",
                     padding: "6px 10px",
                     borderRadius: "4px",
                     cursor: "pointer",
@@ -346,7 +379,7 @@ const ViewMembers = ({ members, setMembers }) => {
                   style={{
                     backgroundColor: "#dc3545",
                     color: "#fff",
-                    border: "none", // ⬅️ Remove outline
+                    border: "none",
                     padding: "6px 10px",
                     borderRadius: "4px",
                     cursor: "pointer",
@@ -364,3 +397,4 @@ const ViewMembers = ({ members, setMembers }) => {
 };
 
 export default ViewMembers;
+
