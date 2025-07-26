@@ -9,6 +9,7 @@ import {
   Divider,
   Alert,
   Button,
+  TextField,
 } from "@mui/material";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
@@ -17,6 +18,7 @@ const UnpaidMembers = () => {
   const [unpaidMembers, setUnpaidMembers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     const fetchUnpaidMembers = async () => {
@@ -34,11 +36,16 @@ const UnpaidMembers = () => {
     fetchUnpaidMembers();
   }, []);
 
+  const filteredMembers = unpaidMembers.filter((member) =>
+    member.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    member.registrationNumber.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   const handleDownloadPDF = () => {
     const doc = new jsPDF();
     doc.text("Unpaid & Partially Paid Members Report", 14, 15);
 
-    const tableData = unpaidMembers.map((member, index) => [
+    const tableData = filteredMembers.map((member, index) => [
       index + 1,
       member.name,
       member.registrationNumber,
@@ -71,35 +78,44 @@ const UnpaidMembers = () => {
   };
 
   return (
-    <Box p={{ xs: 2, sm: 3 }} maxWidth="600px" mx="auto">
-      <Box
-        display="flex"
-        flexDirection={{ xs: "column", sm: "row" }}
-        justifyContent="space-between"
-        alignItems={{ xs: "flex-start", sm: "center" }}
-        mb={2}
-        gap={1}
-      >
+     <Box p={2} sx={{ maxWidth: "100%", mx: "auto" }}>
+          <Box
+            display="flex"
+            flexDirection={{ xs: "column", sm: "row" }}
+            justifyContent="space-between"
+            alignItems={{ xs: "stretch", sm: "center" }}
+            gap={2}
+            mb={2}
+          >
         <Typography variant="h6">🧾 Unpaid Members</Typography>
-        <Button
-          variant="contained"
-          color="primary"
-          size="small"
-          onClick={handleDownloadPDF}
-          sx={{ textTransform: "none", px: 2, py: 0.5, whiteSpace: "nowrap" }}
-        >
-          📄 Download PDF
-        </Button>
-      </Box>
+                <Box display="flex" gap={2} alignItems="center" flexWrap="wrap">
+                  <TextField
+                    size="small"
+                    label="Search Reg No. or Name"
+                    variant="outlined"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                  />
+                  <Button
+                    variant="contained"
+                    sx={{ textTransform: "capitalize" }}
+                    size="small"
+                    color="primary"
+                    onClick={handleDownloadPDF}
+                  >
+                    📄 Download PDF
+                  </Button>
+                </Box></Box>
+        
 
       {loading ? (
         <CircularProgress />
       ) : error ? (
         <Alert severity="error">{error}</Alert>
-      ) : unpaidMembers.length === 0 ? (
-        <Typography>No unpaid members found.</Typography>
+      ) : filteredMembers.length === 0 ? (
+        <Typography>No matching unpaid members found.</Typography>
       ) : (
-        unpaidMembers.map((member) => (
+        filteredMembers.map((member) => (
           <Card key={member._id} sx={{ mb: 2 }}>
             <CardContent>
               <Typography variant="h6" fontSize={{ xs: "1rem", sm: "1.2rem" }}>
@@ -128,3 +144,4 @@ const UnpaidMembers = () => {
 };
 
 export default UnpaidMembers;
+
