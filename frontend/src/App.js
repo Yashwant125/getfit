@@ -66,7 +66,7 @@ const PublicRoute = ({ children }) => {
 
 const Layout = ({ children, value, setValue, sidebarOpen, setSidebarOpen }) => {
   const location = useLocation();
-  const hideLayoutOn = ["/login", "/signup", "/forgot-password"];
+  const hideLayoutOn = ["/login", "/signup", "/forgot-password", "/reset-password"];
   const isMinimal = hideLayoutOn.includes(location.pathname);
 
   return (
