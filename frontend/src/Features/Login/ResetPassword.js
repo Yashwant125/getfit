@@ -6,14 +6,22 @@ import {
   Button,
   Box,
   CircularProgress,
-  
+  InputAdornment,
+  IconButton,
+  Paper,
 } from '@mui/material';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const ResetPassword = () => {
   const [phone, setPhone] = useState('');
   const [newPassword, setNewPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  const navigate = useNavigate();
 
   const handleReset = async () => {
     if (!phone || !newPassword) {
@@ -23,7 +31,7 @@ const ResetPassword = () => {
 
     try {
       setLoading(true);
-      const res = await axios.post('https://getfit-v9g1.onrender.com/api/auth/reset-password', {
+      const res = await axios.post('http://localhost:5000/api/auth/reset-password', {
         phone,
         newPassword,
       });
@@ -39,13 +47,13 @@ const ResetPassword = () => {
 
   return (
     <Container maxWidth="xs">
-      <Box
+      <Paper
+        elevation={6}
         sx={{
-          mt: 8,
-          p: 3,
-          borderRadius: 2,
-          boxShadow: 3,
-          bgcolor: 'background.paper',
+          mt: 10,
+          p: 4,
+          borderRadius: 3,
+          backgroundColor: '#ffffff',
         }}
       >
         <Typography
@@ -53,6 +61,7 @@ const ResetPassword = () => {
           align="center"
           fontWeight="bold"
           gutterBottom
+          sx={{ color: '#1976d2' }}
         >
           Reset Password
         </Typography>
@@ -69,18 +78,31 @@ const ResetPassword = () => {
           <TextField
             fullWidth
             label="New Password"
-            type="password"
+            type={showPassword ? 'text' : 'password'}
             value={newPassword}
             onChange={(e) => setNewPassword(e.target.value)}
             margin="normal"
             required
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    onClick={() => setShowPassword((prev) => !prev)}
+                    edge="end"
+                  >
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
           />
+
           <Button
             fullWidth
             variant="contained"
             color="primary"
             onClick={handleReset}
-            sx={{ mt: 2 }}
+            sx={{ mt: 3 }}
             disabled={loading}
           >
             {loading ? (
@@ -89,10 +111,20 @@ const ResetPassword = () => {
               'Reset Password'
             )}
           </Button>
+
+          <Button
+            fullWidth
+            variant="text"
+            onClick={() => navigate('/login')}
+            sx={{ mt: 1, textTransform: 'none', fontWeight: 500, color: '#1976d2' }}
+          >
+            ← Back to Login
+          </Button>
         </Box>
-      </Box>
+      </Paper>
     </Container>
   );
 };
 
 export default ResetPassword;
+
