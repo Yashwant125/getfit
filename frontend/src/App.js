@@ -156,7 +156,7 @@ const App = () => {
           <Route path="/attendance-list" element={<ProtectedRoute><AttendanceList /></ProtectedRoute>} />
 
           {/* Reset password */}
-          <Route path="/reset-password" element={<ProtectedRoute><ResetPassword /></ProtectedRoute>} />
+          <Route path="/reset-password" element={<ResetPassword />} />
 
           <Route path="/generate-invoice" element={<ProtectedRoute><InvoicePage /></ProtectedRoute>} />
 
