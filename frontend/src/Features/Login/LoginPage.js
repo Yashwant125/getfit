@@ -7,15 +7,19 @@ import {
   Typography,
   Paper,
   Link,
-  Divider,
+  InputAdornment,
+  IconButton
 } from "@mui/material";
 import FitnessCenterIcon from "@mui/icons-material/FitnessCenter";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const LoginPage = () => {
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -26,17 +30,16 @@ const LoginPage = () => {
     }
 
     try {
-      const res = await axios.post("https://getfit-v9g1.onrender.com/api/auth/login", {
+      const res = await axios.post("http://localhost:5000/api/auth/login", {
         phone,
         password,
       });
 
       const { token, user } = res.data;
 
-      // Save token, user, and ownerId for secure session
       localStorage.setItem("token", token);
       localStorage.setItem("user", JSON.stringify(user));
-      localStorage.setItem("ownerId", user.ownerId); // this is key for filtering data
+      localStorage.setItem("ownerId", user.ownerId);
 
       alert("Login successful");
       navigate("/");
@@ -55,7 +58,7 @@ const LoginPage = () => {
           py: 5,
           textAlign: "center",
           borderRadius: 3,
-          backgroundColor: "#fafafa",
+          backgroundColor: "#f9f9f9",
         }}
       >
         {/* Logo */}
@@ -77,16 +80,31 @@ const LoginPage = () => {
             margin="dense"
             sx={{ bgcolor: "white" }}
           />
+
           <TextField
             fullWidth
-            type="password"
+            type={showPassword ? "text" : "password"}
             label="Password"
             variant="outlined"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             margin="dense"
             sx={{ bgcolor: "white" }}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    size="small"
+                    onClick={() => setShowPassword((prev) => !prev)}
+                    edge="end"
+                  >
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
           />
+
           <Button
             fullWidth
             type="submit"
@@ -104,33 +122,28 @@ const LoginPage = () => {
           </Button>
         </Box>
 
-        {/* Forgot password text */}
-        <Box mt={2}>
-          <Typography
-            variant="body2"
-            sx={{ fontSize: 13, color: "text.secondary" }}
+        {/* Forgot + Sign Up Row */}
+        <Box
+          mt={2}
+          display="flex"
+          justifyContent="space-between"
+          alignItems="center"
+        >
+          <Link
+            href="/reset-password"
+            underline="hover"
+            sx={{ fontSize: 14, color: "text.secondary" }}
           >
-            Forgot password?{" "}
-            <Box component="span" sx={{ fontWeight: 500, color: "#1976d2" }}>
-              Contact your gym owner
-            </Box>
-          </Typography>
-        </Box>
+            Forgot password
+          </Link>
 
-        <Divider sx={{ my: 3 }} />
-
-        {/* Sign up link */}
-        <Box>
-          <Typography variant="body2" sx={{ fontSize: 13 }}>
-            Don’t have an account?{" "}
-            <Link
-              href="/signup"
-              underline="hover"
-              sx={{ fontWeight: 600, color: "#1976d2" }}
-            >
-              Sign up
-            </Link>
-          </Typography>
+          <Link
+            href="/signup"
+            underline="hover"
+            sx={{ fontSize: 14, color: "text.secondary" }}
+          >
+            Sign up
+          </Link>
         </Box>
       </Paper>
     </Container>
@@ -138,3 +151,4 @@ const LoginPage = () => {
 };
 
 export default LoginPage;
+
