@@ -13,11 +13,13 @@ import {
   TableRow,
   Button,
   Paper,
+  TextField,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 
 function AttendanceList() {
   const [groupedRecords, setGroupedRecords] = useState({});
+  const [searchTerm, setSearchTerm] = useState("");
 
   const fetchData = async () => {
     try {
@@ -68,12 +70,24 @@ function AttendanceList() {
     let y = 25;
 
     Object.entries(groupedRecords).forEach(([date, records], index) => {
+      const filtered = records.filter((r) => {
+        const m = r.memberId || {};
+        const regNo = (m.registrationNumber || "").toLowerCase();
+        const name = (m.name || "").toLowerCase();
+        return (
+          regNo.includes(searchTerm.toLowerCase()) ||
+          name.includes(searchTerm.toLowerCase())
+        );
+      });
+
+      if (filtered.length === 0) return;
+
       if (index > 0) y += 10;
       doc.setFontSize(13);
       doc.text(`Date: ${date}`, 14, y);
       y += 4;
 
-      const tableData = records.map((record) => {
+      const tableData = filtered.map((record) => {
         const m = record.memberId || {};
         return [
           m.registrationNumber || "N/A",
@@ -109,80 +123,102 @@ function AttendanceList() {
         gap={2}
         mb={3}
       >
-        <Typography
-          variant="h6"
-          fontWeight="bold"
-        >
+        <Typography variant="h6" fontWeight="bold">
           📋 Attendance List
         </Typography>
-        <Button
-          variant="contained"
-          sx={{ textTransform: "capitalize" }}
-          size="small"
-          color="primary"
-          onClick={downloadAsPDF}
-        >
-          📄 Download PDF
-        </Button>
+
+        <Box display="flex" gap={2} alignItems="center" flexWrap="wrap">
+          <TextField
+            size="small"
+            label="Search Reg No. or Name"
+            variant="outlined"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+          <Button
+            variant="contained"
+            sx={{ textTransform: "capitalize" }}
+            size="small"
+            color="primary"
+            onClick={downloadAsPDF}
+          >
+            📄 Download PDF
+          </Button>
+        </Box>
       </Box>
 
-      {Object.entries(groupedRecords).map(([date, records], index) => (
-        <Paper elevation={3} key={index} sx={{ mb: 4, p: { xs: 1.5, sm: 2 } }}>
-          <Typography
-            variant="subtitle1"
-            gutterBottom
-            sx={{ fontWeight: 600, color: "#444" }}
-          >
-            📅 {date}
-          </Typography>
-          <Box sx={{ overflowX: "auto" }}>
-            <Table size="small">
-              <TableHead>
-                <TableRow sx={{ backgroundColor: "#f5f5f5" }}>
-                  <TableCell><strong>Reg No</strong></TableCell>
-                  <TableCell><strong>Name</strong></TableCell>
-                  <TableCell><strong>Phone</strong></TableCell>
-                  <TableCell><strong>Expiry Date</strong></TableCell>
-                  <TableCell align="center"><strong>Action</strong></TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {records.map((record, idx) => {
-                  const m = record.memberId || {};
-                  return (
-                    <TableRow
-                      key={record._id}
-                      sx={{
-                        backgroundColor: idx % 2 === 0 ? "#fafafa" : "#fff",
-                        "&:hover": { backgroundColor: "#f0f0f0" },
-                      }}
-                    >
-                      <TableCell>{m.registrationNumber || "N/A"}</TableCell>
-                      <TableCell>{m.name || "N/A"}</TableCell>
-                      <TableCell>{m.phone || "N/A"}</TableCell>
-                      <TableCell>
-                        {m.endDate
-                          ? new Date(m.endDate).toLocaleDateString()
-                          : "N/A"}
-                      </TableCell>
-                      <TableCell align="center">
-                        <IconButton
-                          color="error"
-                          onClick={() => handleDelete(record._id, date)}
-                        >
-                          <DeleteIcon />
-                        </IconButton>
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
-              </TableBody>
-            </Table>
-          </Box>
-        </Paper>
-      ))}
+      {Object.entries(groupedRecords).map(([date, records], index) => {
+        const filteredRecords = records.filter((r) => {
+          const m = r.memberId || {};
+          const regNo = (m.registrationNumber || "").toLowerCase();
+          const name = (m.name || "").toLowerCase();
+          return (
+            regNo.includes(searchTerm.toLowerCase()) ||
+            name.includes(searchTerm.toLowerCase())
+          );
+        });
+
+        if (filteredRecords.length === 0) return null;
+
+        return (
+          <Paper elevation={3} key={index} sx={{ mb: 4, p: { xs: 1.5, sm: 2 } }}>
+            <Typography
+              variant="subtitle1"
+              gutterBottom
+              sx={{ fontWeight: 600, color: "#444" }}
+            >
+              📅 {date}
+            </Typography>
+            <Box sx={{ overflowX: "auto" }}>
+              <Table size="small">
+                <TableHead>
+                  <TableRow sx={{ backgroundColor: "#f5f5f5" }}>
+                    <TableCell><strong>Reg No</strong></TableCell>
+                    <TableCell><strong>Name</strong></TableCell>
+                    <TableCell><strong>Phone</strong></TableCell>
+                    <TableCell><strong>Expiry Date</strong></TableCell>
+                    <TableCell align="center"><strong>Action</strong></TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {filteredRecords.map((record, idx) => {
+                    const m = record.memberId || {};
+                    return (
+                      <TableRow
+                        key={record._id}
+                        sx={{
+                          backgroundColor: idx % 2 === 0 ? "#fafafa" : "#fff",
+                          "&:hover": { backgroundColor: "#f0f0f0" },
+                        }}
+                      >
+                        <TableCell>{m.registrationNumber || "N/A"}</TableCell>
+                        <TableCell>{m.name || "N/A"}</TableCell>
+                        <TableCell>{m.phone || "N/A"}</TableCell>
+                        <TableCell>
+                          {m.endDate
+                            ? new Date(m.endDate).toLocaleDateString()
+                            : "N/A"}
+                        </TableCell>
+                        <TableCell align="center">
+                          <IconButton
+                            color="error"
+                            onClick={() => handleDelete(record._id, date)}
+                          >
+                            <DeleteIcon />
+                          </IconButton>
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
+                </TableBody>
+              </Table>
+            </Box>
+          </Paper>
+        );
+      })}
     </Box>
   );
 }
 
 export default AttendanceList;
+
