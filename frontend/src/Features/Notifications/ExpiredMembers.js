@@ -9,19 +9,23 @@ import {
   Divider,
   Alert,
   Button,
+  TextField,
 } from "@mui/material";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 
 const ExpiredMembers = () => {
   const [expiredMembers, setExpiredMembers] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchExpiredMembers = async () => {
       try {
-        const response = await axios.get("https://getfit-v9g1.onrender.com/api/members/expired");
+        const response = await axios.get(
+          "https://getfit-v9g1.onrender.com/api/members/expired"
+        );
         setExpiredMembers(response.data);
       } catch (error) {
         setError("Error fetching expired members.");
@@ -34,11 +38,19 @@ const ExpiredMembers = () => {
     fetchExpiredMembers();
   }, []);
 
+  const filteredMembers = expiredMembers.filter((member) => {
+    const term = searchTerm.toLowerCase();
+    return (
+      member.name.toLowerCase().includes(term) ||
+      member.registrationNumber.toLowerCase().includes(term)
+    );
+  });
+
   const handleDownloadPDF = () => {
     const doc = new jsPDF();
     doc.text("Expired Members Report", 14, 15);
 
-    const tableData = expiredMembers.map((member, index) => [
+    const tableData = filteredMembers.map((member, index) => [
       index + 1,
       member.name,
       member.registrationNumber,
@@ -81,25 +93,35 @@ const ExpiredMembers = () => {
         mb={2}
       >
         <Typography variant="h5">⌛ Expired Members</Typography>
-        <Button
-          variant="contained"
-          color="primary"
-          size="small"
-          sx={{ textTransform: "capitalize", whiteSpace: "nowrap" }}
-          onClick={handleDownloadPDF}
-        >
-          📄 Download PDF
-        </Button>
-      </Box>
+
+               <Box display="flex" gap={2} alignItems="center" flexWrap="wrap">
+                 <TextField
+                   size="small"
+                   label="Search Reg No. or Name"
+                   variant="outlined"
+                   value={searchTerm}
+                   onChange={(e) => setSearchTerm(e.target.value)}
+                 />
+                 <Button
+                   variant="contained"
+                   sx={{ textTransform: "capitalize" }}
+                   size="small"
+                   color="primary"
+                   onClick={handleDownloadPDF}
+                 >
+                   📄 Download PDF
+                 </Button>
+               </Box>
+               </Box>
 
       {loading ? (
         <CircularProgress />
       ) : error ? (
         <Alert severity="error">{error}</Alert>
-      ) : expiredMembers.length === 0 ? (
+      ) : filteredMembers.length === 0 ? (
         <Typography>No expired members found.</Typography>
       ) : (
-        expiredMembers.map((member) => (
+        filteredMembers.map((member) => (
           <Card key={member._id} sx={{ mb: 2 }}>
             <CardContent>
               <Typography variant="h6" fontSize={{ xs: 16, sm: 18 }}>
@@ -128,3 +150,4 @@ const ExpiredMembers = () => {
 };
 
 export default ExpiredMembers;
+
