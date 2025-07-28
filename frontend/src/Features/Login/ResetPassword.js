@@ -31,7 +31,7 @@ const ResetPassword = () => {
 
     try {
       setLoading(true);
-      const res = await axios.post('http://localhost:5000/api/auth/reset-password', {
+      const res = await axios.post('https://getfit-v9g1.onrender.com/api/auth/reset-password', {
         phone,
         newPassword,
       });
@@ -46,83 +46,93 @@ const ResetPassword = () => {
   };
 
   return (
-    <Container maxWidth="xs">
-      <Paper
-        elevation={6}
-        sx={{
-          mt: 10,
-          p: 4,
-          borderRadius: 3,
-          backgroundColor: '#ffffff',
-        }}
-      >
-        <Typography
-          variant="h5"
-          align="center"
-          fontWeight="bold"
-          gutterBottom
-          sx={{ color: '#1976d2' }}
+    <Box
+      sx={{
+        minHeight: '100vh',
+        bgcolor: '#f0f2f5',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'flex-start',
+        pt: 18,
+      }}
+    >
+      <Container maxWidth="xs">
+        <Paper
+          elevation={6}
+          sx={{
+            p: 4,
+            borderRadius: 3,
+            backgroundColor: '#ffffff',
+          }}
         >
-          Reset Password
-        </Typography>
-
-        <Box component="form" noValidate autoComplete="off">
-          <TextField
-            fullWidth
-            label="Phone Number"
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-            margin="normal"
-            required
-          />
-          <TextField
-            fullWidth
-            label="New Password"
-            type={showPassword ? 'text' : 'password'}
-            value={newPassword}
-            onChange={(e) => setNewPassword(e.target.value)}
-            margin="normal"
-            required
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton
-                    onClick={() => setShowPassword((prev) => !prev)}
-                    edge="end"
-                  >
-                    {showPassword ? <VisibilityOff /> : <Visibility />}
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
-          />
-
-          <Button
-            fullWidth
-            variant="contained"
-            color="primary"
-            onClick={handleReset}
-            sx={{ mt: 3 }}
-            disabled={loading}
+          <Typography
+            variant="h5"
+            align="center"
+            fontWeight="bold"
+            gutterBottom
+            sx={{ color: '#1976d2' }}
           >
-            {loading ? (
-              <CircularProgress size={24} color="inherit" />
-            ) : (
-              'Reset Password'
-            )}
-          </Button>
+            Reset Password
+          </Typography>
 
-          <Button
-            fullWidth
-            variant="text"
-            onClick={() => navigate('/login')}
-            sx={{ mt: 1, textTransform: 'none', fontWeight: 500, color: '#1976d2' }}
-          >
-            ← Back to Login
-          </Button>
-        </Box>
-      </Paper>
-    </Container>
+          <Box component="form" noValidate autoComplete="off">
+            <TextField
+              fullWidth
+              label="Phone Number"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              margin="normal"
+              required
+            />
+            <TextField
+              fullWidth
+              label="New Password"
+              type={showPassword ? 'text' : 'password'}
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+              margin="normal"
+              required
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      onClick={() => setShowPassword((prev) => !prev)}
+                      edge="end"
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+            />
+
+            <Button
+              fullWidth
+              variant="contained"
+              color="primary"
+              onClick={handleReset}
+              sx={{ mt: 3 }}
+              disabled={loading}
+            >
+              {loading ? (
+                <CircularProgress size={24} color="inherit" />
+              ) : (
+                'Reset Password'
+              )}
+            </Button>
+
+            <Button
+              fullWidth
+              variant="text"
+              onClick={() => navigate('/login')}
+              sx={{ mt: 1, textTransform: 'none', fontWeight: 500, color: '#1976d2' }}
+            >
+              ← Back to Login
+            </Button>
+          </Box>
+        </Paper>
+      </Container>
+    </Box>
   );
 };
 
