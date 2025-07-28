@@ -30,7 +30,7 @@ const LoginPage = () => {
     }
 
     try {
-      const res = await axios.post("http://localhost:5000/api/auth/login", {
+      const res = await axios.post("https://getfit-v9g1.onrender.com/api/auth/login", {
         phone,
         password,
       });
@@ -49,11 +49,14 @@ const LoginPage = () => {
 
   return (
     <Box
-      minHeight="100vh"
-      display="flex"
-      alignItems="center"
-      justifyContent="center"
-      bgcolor="#f0f2f5"
+      sx={{
+        minHeight: "100vh",
+        display: "flex",
+        alignItems: "flex-start",
+        justifyContent: "center",
+        bgcolor: "#f0f2f5",
+        pt: 13,
+      }}
     >
       <Container maxWidth="xs">
         <Paper
@@ -125,29 +128,29 @@ const LoginPage = () => {
             </Button>
           </Box>
 
-          {/* Forgot + Sign Up */}
-          <Box
-            mt={2}
-            display="flex"
-            justifyContent="space-between"
-            alignItems="center"
-          >
+          {/* Forgot Password - Centered */}
+          <Box mt={3} textAlign="center">
             <Link
               href="/reset-password"
               underline="hover"
               sx={{ fontSize: 14, color: "text.secondary" }}
             >
-              Forgot password
-            </Link>
-
-            <Link
-              href="/signup"
-              underline="hover"
-              sx={{ fontSize: 14, color: "text.secondary" }}
-            >
-              Sign up
+              Forgot password?
             </Link>
           </Box>
+
+          {/* Horizontal Line Separator */}
+          <Box my={2}>
+            <hr style={{ border: "none", borderTop: "1px solid #ccc" }} />
+          </Box>
+
+          {/* Sign Up Prompt */}
+          <Typography fontSize={14} align="center" color="text.secondary">
+            Don’t have an account?{" "}
+            <Link href="/signup" underline="hover">
+              Sign up
+            </Link>
+          </Typography>
         </Paper>
       </Container>
     </Box>
