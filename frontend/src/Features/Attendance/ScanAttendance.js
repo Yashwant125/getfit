@@ -20,57 +20,109 @@ function ScanAttendance() {
 
   return (
     <div
-      className="attendance-form"
       style={{
-        maxWidth: "400px",
-        margin: "0 auto",
-        padding: "1.5rem",
+        minHeight: "100vh",
+        backgroundColor: "#eef2f7",
         display: "flex",
-        flexDirection: "column",
-        gap: "1rem",
-        boxShadow: "0 0 10px rgba(0,0,0,0.1)",
-        borderRadius: "10px",
-        backgroundColor: "#f9f9f9",
+        justifyContent: "center",
+        alignItems: "flex-start",
+        paddingTop: "180px",
+        paddingLeft: "1rem",
+        paddingRight: "1rem",
       }}
     >
-      <h2 style={{ textAlign: "center", fontSize: "1.2rem" }}>
-        Mark Your Attendance
-      </h2>
-      <form
-        onSubmit={handleSubmit}
-        style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}
+      <div
+        style={{
+          width: "100%",
+          maxWidth: "420px",
+          backgroundColor: "#ffffff",
+          borderRadius: "12px",
+          boxShadow: "0 8px 24px rgba(0, 0, 0, 0.1)",
+          padding: "2rem",
+          display: "flex",
+          flexDirection: "column",
+          gap: "1.2rem",
+        }}
       >
-        <input
-          type="text"
-          placeholder="Enter Phone or Registration Number"
-          value={identifier}
-          onChange={(e) => setIdentifier(e.target.value)}
-          required
+        <h2
           style={{
-            padding: "0.6rem",
-            fontSize: "1rem",
-            borderRadius: "5px",
-            border: "1px solid #ccc",
-          }}
-        />
-        <button
-          type="submit"
-          style={{
-            padding: "0.6rem",
-            fontSize: "1rem",
-            backgroundColor: "#1976d2",
-            color: "white",
-            border: "none",
-            borderRadius: "5px",
-            cursor: "pointer",
+            textAlign: "center",
+            fontSize: "1.4rem",
+            whiteSpace: "nowrap", // Ensures single line
+            color: "#1e293b",
+            marginBottom: "0.5rem",
+            fontWeight: "600",
           }}
         >
-          Mark Present
-        </button>
-      </form>
-      <p style={{ textAlign: "center", color: "#333", margin: 0 }}>{message}</p>
+          Mark Your Attendance
+        </h2>
+
+        <form
+          onSubmit={handleSubmit}
+          style={{ display: "flex", flexDirection: "column", gap: "1rem" }}
+        >
+          <input
+            type="text"
+            placeholder="Phone or Registration Number"
+            value={identifier}
+            onChange={(e) => setIdentifier(e.target.value)}
+            required
+            style={{
+              padding: "0.75rem",
+              fontSize: "1rem",
+              borderRadius: "8px",
+              border: "1px solid #cbd5e1",
+              outline: "none",
+              transition: "border 0.2s",
+            }}
+            onFocus={(e) =>
+              (e.target.style.border = "1px solid #1976d2")
+            }
+            onBlur={(e) =>
+              (e.target.style.border = "1px solid #cbd5e1")
+            }
+          />
+
+          <button
+            type="submit"
+            style={{
+              padding: "0.75rem",
+              fontSize: "1rem",
+              backgroundColor: "#1976d2",
+              color: "white",
+              border: "none",
+              borderRadius: "8px",
+              cursor: "pointer",
+              fontWeight: "500",
+              transition: "background-color 0.2s ease-in-out",
+            }}
+            onMouseOver={(e) =>
+              (e.target.style.backgroundColor = "#155fa0")
+            }
+            onMouseOut={(e) =>
+              (e.target.style.backgroundColor = "#1976d2")
+            }
+          >
+            Mark Present
+          </button>
+        </form>
+
+        {message && (
+          <p
+            style={{
+              textAlign: "center",
+              color: message.includes("Error") ? "#dc2626" : "#16a34a",
+              fontWeight: "500",
+              marginTop: "0.5rem",
+            }}
+          >
+            {message}
+          </p>
+        )}
+      </div>
     </div>
   );
 }
 
 export default ScanAttendance;
+
