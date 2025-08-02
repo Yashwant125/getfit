@@ -24,7 +24,7 @@ const AddMember = ({ setMembers }) => {
   const [formData, setFormData] = useState({
     registrationNumber: "",
     name: "",
-    phone: "",
+    phone: "", // now optional
     amountPaid: "",
     status: "",
     membershipType: "",
@@ -50,18 +50,10 @@ const AddMember = ({ setMembers }) => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-
-    if (name === "startDate") {
-      setFormData((prev) => ({
-        ...prev,
-        startDate: value,
-      }));
-    } else {
-      setFormData((prev) => ({
-        ...prev,
-        [name]: value,
-      }));
-    }
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
   const handleSubmit = async (e) => {
@@ -92,9 +84,10 @@ const AddMember = ({ setMembers }) => {
         endDate: new Date(formData.endDate),
       };
 
-      console.log("Sending request with data:", updatedData);
-
-      const res = await axios.post("https://getfit-v9g1.onrender.com/api/members", updatedData);
+      const res = await axios.post(
+        "https://getfit-v9g1.onrender.com/api/members",
+        updatedData
+      );
 
       if (res.status === 200 || res.status === 201) {
         setMembers((prev) => [...prev, res.data]);
@@ -113,7 +106,10 @@ const AddMember = ({ setMembers }) => {
         alert("Failed to add member. Please try again.");
       }
     } catch (error) {
-      console.error("Error adding member:", error.response ? error.response.data : error.message);
+      console.error(
+        "Error adding member:",
+        error.response ? error.response.data : error.message
+      );
       alert("Error adding member. Please check the console.");
     }
   };
@@ -151,10 +147,9 @@ const AddMember = ({ setMembers }) => {
             <TextField
               fullWidth
               name="phone"
-              label="Phone Number"
+              label="Phone Number (optional)"
               value={formData.phone}
               onChange={handleChange}
-              required
             />
           </Grid>
 
@@ -170,7 +165,6 @@ const AddMember = ({ setMembers }) => {
             />
           </Grid>
 
-          {/* Membership Type First */}
           <Grid item xs={6}>
             <FormControl fullWidth required>
               <Select
@@ -190,7 +184,6 @@ const AddMember = ({ setMembers }) => {
             </FormControl>
           </Grid>
 
-          {/* Status Second */}
           <Grid item xs={6}>
             <FormControl fullWidth required>
               <Select
@@ -200,10 +193,7 @@ const AddMember = ({ setMembers }) => {
                 displayEmpty
                 variant="outlined"
                 renderValue={(selected) => selected || "Select Status"}
-                 sx={{
-      height: 56,            // increase height
-      fontSize: "1rem",      // increase font size
-    }}
+                sx={{ height: 56, fontSize: "1rem" }}
               >
                 {statusOptions.map((option) => (
                   <MenuItem key={option.value} value={option.value}>
