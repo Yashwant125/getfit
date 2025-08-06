@@ -74,7 +74,7 @@ const AddPlan = ({ setPlans }) => {
           width: "100%",
         }}
       >
-        <Typography variant="h6" gutterBottom>
+        <Typography variant="h6" gutterBottom mb={3}>
           Create Membership Plan
         </Typography>
         <form onSubmit={handleSubmit}>
