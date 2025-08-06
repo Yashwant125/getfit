@@ -57,8 +57,8 @@ const ExpiredMembers = () => {
       member.phone,
       member.membershipType,
       member.status,
-      new Date(member.startDate).toLocaleDateString(),
-      new Date(member.endDate).toLocaleDateString(),
+      new Date(member.startDate).toLocaleDateString("en-GB"),
+      new Date(member.endDate).toLocaleDateString("en-GB"),
     ]);
 
     autoTable(doc, {
@@ -94,25 +94,25 @@ const ExpiredMembers = () => {
       >
         <Typography variant="h5">⌛ Expired Members</Typography>
 
-               <Box display="flex" gap={2} alignItems="center" flexWrap="wrap">
-                 <TextField
-                   size="small"
-                   label="Search Reg No. or Name"
-                   variant="outlined"
-                   value={searchTerm}
-                   onChange={(e) => setSearchTerm(e.target.value)}
-                 />
-                 <Button
-                   variant="contained"
-                   sx={{ textTransform: "capitalize" }}
-                   size="small"
-                   color="primary"
-                   onClick={handleDownloadPDF}
-                 >
-                   📄 Download PDF
-                 </Button>
-               </Box>
-               </Box>
+        <Box display="flex" gap={2} alignItems="center" flexWrap="wrap">
+          <TextField
+            size="small"
+            label="Search Reg No. or Name"
+            variant="outlined"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+          <Button
+            variant="contained"
+            sx={{ textTransform: "capitalize" }}
+            size="small"
+            color="primary"
+            onClick={handleDownloadPDF}
+          >
+            📄 Download PDF
+          </Button>
+        </Box>
+      </Box>
 
       {loading ? (
         <CircularProgress />
@@ -138,8 +138,8 @@ const ExpiredMembers = () => {
               </Typography>
               <Divider sx={{ my: 1 }} />
               <Typography variant="body2" fontSize={{ xs: 13, sm: 14 }}>
-                Start: {new Date(member.startDate).toLocaleDateString()} | End:{" "}
-                {new Date(member.endDate).toLocaleDateString()}
+                Start: {new Date(member.startDate).toLocaleDateString("en-GB")} | End:{" "}
+                {new Date(member.endDate).toLocaleDateString("en-GB")}
               </Typography>
             </CardContent>
           </Card>
@@ -150,4 +150,5 @@ const ExpiredMembers = () => {
 };
 
 export default ExpiredMembers;
+
 
