@@ -115,8 +115,8 @@ const AddMember = ({ setMembers }) => {
   };
 
   return (
-    <Paper elevation={3} sx={{ p: 4, maxWidth: 700, mx: "auto", mt: 5 }}>
-      <Typography variant="h6" gutterBottom>
+    <Paper elevation={3} sx={{ p: 4, maxWidth: 700, mx: "auto", mt: 2 }}>
+      <Typography variant="h6" gutterBottom mb={3}>
         Add Member
       </Typography>
       <form onSubmit={handleSubmit}>
