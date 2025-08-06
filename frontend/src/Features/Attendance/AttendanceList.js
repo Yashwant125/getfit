@@ -93,7 +93,9 @@ function AttendanceList() {
           m.registrationNumber || "N/A",
           m.name || "N/A",
           m.phone || "N/A",
-          m.endDate ? new Date(m.endDate).toLocaleDateString() : "N/A",
+          m.endDate
+            ? new Date(m.endDate).toLocaleDateString("en-GB")
+            : "N/A",
         ];
       });
 
@@ -196,7 +198,7 @@ function AttendanceList() {
                         <TableCell>{m.phone || "N/A"}</TableCell>
                         <TableCell>
                           {m.endDate
-                            ? new Date(m.endDate).toLocaleDateString()
+                            ? new Date(m.endDate).toLocaleDateString("en-GB")
                             : "N/A"}
                         </TableCell>
                         <TableCell align="center">
@@ -221,4 +223,5 @@ function AttendanceList() {
 }
 
 export default AttendanceList;
+
 
