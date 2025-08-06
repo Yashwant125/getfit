@@ -45,7 +45,7 @@ const StatCard = ({ title, value, icon, color }) => (
   </Card>
 );
 
-const formatDate = (dateStr) => new Date(dateStr).toLocaleDateString();
+const formatDate = (dateStr) => new Date(dateStr).toLocaleDateString("en-GB");
 
 const DataSection = ({ title, data, emptyText, icon, buttonLink, buttonLabel }) => {
   const navigate = useNavigate();
@@ -105,20 +105,19 @@ const DataSection = ({ title, data, emptyText, icon, buttonLink, buttonLabel }) 
                 <ListItemAvatar>
                   <Avatar sx={{ bgcolor: "#1976d2" }}>{item.name.charAt(0)}</Avatar>
                 </ListItemAvatar>
-               <ListItemText
-  primary={`${item.name}, ${item.phone}`}
-  secondary={
-    <Box sx={{ display: "flex", flexDirection: { xs: "column", sm: "row" }, gap: 0.5 }}>
-      <Typography variant="body2" color="textSecondary">
-        Valid From: {formatDate(item.startDate)}
-      </Typography>
-      <Typography variant="body2" color="textSecondary">
-        To: {formatDate(item.endDate)}
-      </Typography>
-    </Box>
-  }
-/>
-
+                <ListItemText
+                  primary={`${item.name}, ${item.phone}`}
+                  secondary={
+                    <Box sx={{ display: "flex", flexDirection: { xs: "column", sm: "row" }, gap: 0.5 }}>
+                      <Typography variant="body2" color="textSecondary">
+                        Valid From: {formatDate(item.startDate)}
+                      </Typography>
+                      <Typography variant="body2" color="textSecondary">
+                        To: {formatDate(item.endDate)}
+                      </Typography>
+                    </Box>
+                  }
+                />
               </ListItem>
               {idx < data.length - 1 && <Divider />}
             </React.Fragment>
@@ -247,3 +246,4 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
+
