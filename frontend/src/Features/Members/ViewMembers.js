@@ -27,22 +27,20 @@ const ViewMembers = ({ members, setMembers }) => {
     fetchData();
   }, [setMembers]);
 
+  const getMonthDifference = (start, end) => {
+    const startDate = new Date(start);
+    const endDate = new Date(end);
+    return (
+      endDate.getMonth() - startDate.getMonth() + 12 * (endDate.getFullYear() - startDate.getFullYear())
+    );
+  };
+
   const handleEditMember = (member) => {
     setEditingMember({
       ...member,
       startDate: member.startDate?.slice(0, 10),
       membershipDuration: getMonthDifference(member.startDate, member.endDate),
     });
-  };
-
-  const getMonthDifference = (start, end) => {
-    const startDate = new Date(start);
-    const endDate = new Date(end);
-    return (
-      endDate.getMonth() -
-      startDate.getMonth() +
-      12 * (endDate.getFullYear() - startDate.getFullYear())
-    );
   };
 
   const handleSaveEdit = async () => {
@@ -92,14 +90,15 @@ const ViewMembers = ({ members, setMembers }) => {
     const headers = [
       ["#", "Reg No", "Name", "Phone", "Membership", "From", "To", "Amount", "Status"],
     ];
+
     const rows = filteredMembers.map((member, index) => [
       index + 1,
       member.registrationNumber || "-",
       member.name || "-",
       member.phone || "-",
       member.membershipType || "-",
-      member.startDate?.slice(0, 10) || "-",
-      member.endDate?.slice(0, 10) || "-",
+      member.startDate ? new Date(member.startDate).toLocaleDateString("en-GB") : "-",
+      member.endDate ? new Date(member.endDate).toLocaleDateString("en-GB") : "-",
       `${member.amountPaid || 0}`,
       member.status || "-",
     ]);
@@ -115,7 +114,6 @@ const ViewMembers = ({ members, setMembers }) => {
     doc.save("Members_Report.pdf");
   };
 
-  // Filter and Sort Members
   const filteredMembers = members
     .filter((member) => {
       const term = searchTerm.toLowerCase();
@@ -134,17 +132,8 @@ const ViewMembers = ({ members, setMembers }) => {
 
   return (
     <div style={{ padding: "1rem", paddingBottom: "1rem" }}>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          marginBottom: "15px",
-        }}
-      >
-        <Typography variant="h5" gutterBottom>
-          All Members
-        </Typography>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "15px" }}>
+        <Typography variant="h5" gutterBottom>All Members</Typography>
         <button
           onClick={downloadAsPDF}
           style={{
@@ -174,7 +163,6 @@ const ViewMembers = ({ members, setMembers }) => {
             borderRadius: "4px",
           }}
         />
-
         <select
           value={sortBy}
           onChange={(e) => setSortBy(e.target.value)}
@@ -211,10 +199,7 @@ const ViewMembers = ({ members, setMembers }) => {
                     type="text"
                     value={editingMember.registrationNumber}
                     onChange={(e) =>
-                      setEditingMember({
-                        ...editingMember,
-                        registrationNumber: e.target.value,
-                      })
+                      setEditingMember({ ...editingMember, registrationNumber: e.target.value })
                     }
                   />
                 </label>
@@ -225,10 +210,7 @@ const ViewMembers = ({ members, setMembers }) => {
                     type="text"
                     value={editingMember.name}
                     onChange={(e) =>
-                      setEditingMember({
-                        ...editingMember,
-                        name: e.target.value,
-                      })
+                      setEditingMember({ ...editingMember, name: e.target.value })
                     }
                   />
                 </label>
@@ -239,10 +221,7 @@ const ViewMembers = ({ members, setMembers }) => {
                     type="text"
                     value={editingMember.phone}
                     onChange={(e) =>
-                      setEditingMember({
-                        ...editingMember,
-                        phone: e.target.value,
-                      })
+                      setEditingMember({ ...editingMember, phone: e.target.value })
                     }
                   />
                 </label>
@@ -253,10 +232,7 @@ const ViewMembers = ({ members, setMembers }) => {
                     type="text"
                     value={editingMember.membershipType}
                     onChange={(e) =>
-                      setEditingMember({
-                        ...editingMember,
-                        membershipType: e.target.value,
-                      })
+                      setEditingMember({ ...editingMember, membershipType: e.target.value })
                     }
                   />
                 </label>
@@ -267,10 +243,7 @@ const ViewMembers = ({ members, setMembers }) => {
                     type="date"
                     value={editingMember.startDate}
                     onChange={(e) =>
-                      setEditingMember({
-                        ...editingMember,
-                        startDate: e.target.value,
-                      })
+                      setEditingMember({ ...editingMember, startDate: e.target.value })
                     }
                   />
                 </label>
@@ -281,10 +254,7 @@ const ViewMembers = ({ members, setMembers }) => {
                     type="number"
                     value={editingMember.membershipDuration}
                     onChange={(e) =>
-                      setEditingMember({
-                        ...editingMember,
-                        membershipDuration: e.target.value,
-                      })
+                      setEditingMember({ ...editingMember, membershipDuration: e.target.value })
                     }
                   />
                 </label>
@@ -295,10 +265,7 @@ const ViewMembers = ({ members, setMembers }) => {
                     type="number"
                     value={editingMember.amountPaid}
                     onChange={(e) =>
-                      setEditingMember({
-                        ...editingMember,
-                        amountPaid: e.target.value,
-                      })
+                      setEditingMember({ ...editingMember, amountPaid: e.target.value })
                     }
                   />
                 </label>
@@ -308,10 +275,7 @@ const ViewMembers = ({ members, setMembers }) => {
                   <select
                     value={editingMember.status}
                     onChange={(e) =>
-                      setEditingMember({
-                        ...editingMember,
-                        status: e.target.value,
-                      })
+                      setEditingMember({ ...editingMember, status: e.target.value })
                     }
                   >
                     <option value="paid">Paid</option>
@@ -335,30 +299,14 @@ const ViewMembers = ({ members, setMembers }) => {
               </div>
             ) : (
               <div>
-                <p>
-                  <strong>Reg No:</strong> {member.registrationNumber}
-                </p>
-                <p>
-                  <strong>Name:</strong> {member.name}
-                </p>
-                <p>
-                  <strong>Phone:</strong> {member.phone}
-                </p>
-                <p>
-                  <strong>Membership:</strong> {member.membershipType}
-                </p>
-                <p>
-                  <strong>Valid From:</strong> {member.startDate?.slice(0, 10)}
-                </p>
-                <p>
-                  <strong>Valid To:</strong> {member.endDate?.slice(0, 10)}
-                </p>
-                <p>
-                  <strong>Amount Paid:</strong> {member.amountPaid || 0}
-                </p>
-                <p>
-                  <strong>Status:</strong> {member.status}
-                </p>
+                <p><strong>Reg No:</strong> {member.registrationNumber}</p>
+                <p><strong>Name:</strong> {member.name}</p>
+                <p><strong>Phone:</strong> {member.phone}</p>
+                <p><strong>Membership:</strong> {member.membershipType}</p>
+                <p><strong>Valid From:</strong> {member.startDate ? new Date(member.startDate).toLocaleDateString("en-GB") : "-"}</p>
+                <p><strong>Valid To:</strong> {member.endDate ? new Date(member.endDate).toLocaleDateString("en-GB") : "-"}</p>
+                <p><strong>Amount Paid:</strong> {member.amountPaid || 0}</p>
+                <p><strong>Status:</strong> {member.status}</p>
                 <button
                   onClick={() => handleEditMember(member)}
                   style={{
@@ -373,7 +321,6 @@ const ViewMembers = ({ members, setMembers }) => {
                 >
                   ✏️ Edit
                 </button>
-
                 <button
                   onClick={() => handleDelete(member._id)}
                   style={{
@@ -397,4 +344,5 @@ const ViewMembers = ({ members, setMembers }) => {
 };
 
 export default ViewMembers;
+
 
