@@ -52,8 +52,8 @@ const UnpaidMembers = () => {
       member.phone,
       member.membershipType,
       member.status,
-      new Date(member.startDate).toLocaleDateString(),
-      new Date(member.endDate).toLocaleDateString(),
+      new Date(member.startDate).toLocaleDateString("en-GB"),
+      new Date(member.endDate).toLocaleDateString("en-GB"),
     ]);
 
     autoTable(doc, {
@@ -78,35 +78,35 @@ const UnpaidMembers = () => {
   };
 
   return (
-     <Box p={2} sx={{ maxWidth: "100%", mx: "auto" }}>
-          <Box
-            display="flex"
-            flexDirection={{ xs: "column", sm: "row" }}
-            justifyContent="space-between"
-            alignItems={{ xs: "stretch", sm: "center" }}
-            gap={2}
-            mb={2}
-          >
+    <Box p={2} sx={{ maxWidth: "100%", mx: "auto" }}>
+      <Box
+        display="flex"
+        flexDirection={{ xs: "column", sm: "row" }}
+        justifyContent="space-between"
+        alignItems={{ xs: "stretch", sm: "center" }}
+        gap={2}
+        mb={2}
+      >
         <Typography variant="h6">🧾 Unpaid Members</Typography>
-                <Box display="flex" gap={2} alignItems="center" flexWrap="wrap">
-                  <TextField
-                    size="small"
-                    label="Search Reg No. or Name"
-                    variant="outlined"
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                  />
-                  <Button
-                    variant="contained"
-                    sx={{ textTransform: "capitalize" }}
-                    size="small"
-                    color="primary"
-                    onClick={handleDownloadPDF}
-                  >
-                    📄 Download PDF
-                  </Button>
-                </Box></Box>
-        
+        <Box display="flex" gap={2} alignItems="center" flexWrap="wrap">
+          <TextField
+            size="small"
+            label="Search Reg No. or Name"
+            variant="outlined"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+          <Button
+            variant="contained"
+            sx={{ textTransform: "capitalize" }}
+            size="small"
+            color="primary"
+            onClick={handleDownloadPDF}
+          >
+            📄 Download PDF
+          </Button>
+        </Box>
+      </Box>
 
       {loading ? (
         <CircularProgress />
@@ -132,8 +132,8 @@ const UnpaidMembers = () => {
               </Typography>
               <Divider sx={{ my: 1 }} />
               <Typography variant="body2" fontSize={{ xs: "0.85rem" }}>
-                Start: {new Date(member.startDate).toLocaleDateString()} | End:{" "}
-                {new Date(member.endDate).toLocaleDateString()}
+                Start: {new Date(member.startDate).toLocaleDateString("en-GB")} | End:{" "}
+                {new Date(member.endDate).toLocaleDateString("en-GB")}
               </Typography>
             </CardContent>
           </Card>
@@ -144,4 +144,5 @@ const UnpaidMembers = () => {
 };
 
 export default UnpaidMembers;
+
 
